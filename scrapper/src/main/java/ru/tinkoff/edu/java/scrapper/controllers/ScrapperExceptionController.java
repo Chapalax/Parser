@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import ru.tinkoff.edu.java.scrapper.dto.ApiErrorResponse;
+import ru.tinkoff.edu.java.scrapper.exceptions.AddedLinkExistsException;
+import ru.tinkoff.edu.java.scrapper.exceptions.ChatNotFoundException;
+import ru.tinkoff.edu.java.scrapper.exceptions.LinkNotFoundException;
+import ru.tinkoff.edu.java.scrapper.exceptions.RegisteredUserExistsException;
 
 import java.util.ArrayList;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
 public class ScrapperExceptionController {
@@ -55,6 +58,30 @@ public class ScrapperExceptionController {
     public ResponseEntity<ApiErrorResponse> httpMessageNotReadable(@NotNull HttpMessageNotReadableException error) {
         return ResponseEntity.status(BAD_REQUEST)
                 .body(createError(error, "Incorrect Request Body", BAD_REQUEST));
+    }
+
+    @ExceptionHandler(ChatNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> chatNotFound(@NotNull ChatNotFoundException error) {
+        return ResponseEntity.status(NOT_FOUND)
+                .body(createError(error, "Chat Not Found", NOT_FOUND));
+    }
+
+    @ExceptionHandler(LinkNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> linkNotFound(@NotNull LinkNotFoundException error) {
+        return ResponseEntity.status(NOT_FOUND)
+                .body(createError(error, "Link Not Found", NOT_FOUND));
+    }
+
+    @ExceptionHandler(AddedLinkExistsException.class)
+    public ResponseEntity<ApiErrorResponse> addedLinkExists(@NotNull AddedLinkExistsException error) {
+        return ResponseEntity.status(METHOD_NOT_ALLOWED)
+                .body(createError(error, "This Link Has Already Been Added", METHOD_NOT_ALLOWED));
+    }
+
+    @ExceptionHandler(RegisteredUserExistsException.class)
+    public ResponseEntity<ApiErrorResponse> registeredUserExists(@NotNull RegisteredUserExistsException error) {
+        return ResponseEntity.status(METHOD_NOT_ALLOWED)
+                .body(createError(error, "This User Is Already Registered", METHOD_NOT_ALLOWED));
     }
 
     @ExceptionHandler(Exception.class)
