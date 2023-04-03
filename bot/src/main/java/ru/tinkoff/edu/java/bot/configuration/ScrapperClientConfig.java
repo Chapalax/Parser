@@ -8,7 +8,7 @@ import ru.tinkoff.edu.java.bot.web.clients.ScrapperClient;
 import ru.tinkoff.edu.java.bot.web.clients.interfaces.WebClientScrapper;
 
 @Validated
-@ConfigurationProperties(prefix = "baseurl", ignoreInvalidFields = false)
+@ConfigurationProperties(prefix = "baseurl", ignoreUnknownFields = false)
 public record ScrapperClientConfig(@NotNull String scrapper) {
 
     @Bean
