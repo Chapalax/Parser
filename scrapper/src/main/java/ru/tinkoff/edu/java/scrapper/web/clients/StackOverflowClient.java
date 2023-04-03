@@ -3,8 +3,8 @@ package ru.tinkoff.edu.java.scrapper.web.clients;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.reactive.function.client.WebClient;
-import ru.tinkoff.edu.java.scrapper.dto.StackOverflowItemsResponse;
-import ru.tinkoff.edu.java.scrapper.dto.StackOverflowResponse;
+import ru.tinkoff.edu.java.scrapper.web.clients.dto.StackOverflowItemsResponse;
+import ru.tinkoff.edu.java.scrapper.web.clients.dto.StackOverflowResponse;
 import ru.tinkoff.edu.java.scrapper.web.clients.interfaces.WebClientStackOverflow;
 
 import java.util.Objects;
@@ -17,11 +17,11 @@ public class StackOverflowClient implements WebClientStackOverflow {
     private final WebClient webClient;
 
     public StackOverflowClient() {
-        this.webClient = WebClient.create(stackOverflowBaseUrl);
+        webClient = WebClient.create(stackOverflowBaseUrl);
     }
 
     public StackOverflowClient(@URL String url) {
-        this.webClient = WebClient.create(url);
+        webClient = WebClient.create(url);
     }
 
     @Override
