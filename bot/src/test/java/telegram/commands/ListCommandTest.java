@@ -56,7 +56,7 @@ public class ListCommandTest {
 
     @Test
     @DisplayName("Checking the warning message when the list of links is empty")
-    void get_EmptyList() throws NoSuchFieldException, IllegalAccessException {
+    void get_EmptyList() throws IllegalAccessError {
         ListLinksResponse listLinksResponse = new ListLinksResponse(new ArrayList<>(), 0);
 
         when(scrapperClient.getAllLinks(ID)).thenReturn(listLinksResponse);
@@ -68,7 +68,7 @@ public class ListCommandTest {
 
     @Test
     @DisplayName("Good response from list command")
-    void get_GoodResponse() throws NoSuchFieldException, IllegalAccessException {
+    void get_GoodResponse() throws IllegalAccessError {
         LinkResponse firstLink = new LinkResponse(ID,
                 URI.create("https://github.com/pengrad/java-telegram-bot-api"));
         LinkResponse secondLink = new LinkResponse(ID,

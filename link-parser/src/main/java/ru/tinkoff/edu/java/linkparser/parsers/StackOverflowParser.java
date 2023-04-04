@@ -13,6 +13,11 @@ public final class StackOverflowParser implements ParserPattern {
     public Record parse(@NotNull URI uri) {
         String[] segments = uri.getPath().split("/");
         if (segments.length >= 3 && "questions".equals(segments[1])) {
+            try {
+                Long.parseLong(segments[2]);
+            } catch (NumberFormatException e) {
+                return null;
+            }
             return new ParsedStackOverflow(segments[2]);
         }
         return null;
