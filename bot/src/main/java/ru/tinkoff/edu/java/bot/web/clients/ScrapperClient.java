@@ -4,7 +4,6 @@ import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.tinkoff.edu.java.bot.web.clients.dto.AddLinkRequest;
 import ru.tinkoff.edu.java.bot.web.clients.dto.LinkResponse;
