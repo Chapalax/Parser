@@ -11,7 +11,7 @@ import ru.tinkoff.edu.java.scrapper.web.clients.interfaces.WebClientStackOverflo
 
 @Validated
 @ConfigurationProperties(prefix = "baseurl", ignoreUnknownFields = false)
-public record ClientConfiguration(String github, String stackoverflow) {
+public record WebClientConfig(String github, String stackoverflow) {
 
     @Bean
     public @NotNull WebClientGitHub gitHubClient() {

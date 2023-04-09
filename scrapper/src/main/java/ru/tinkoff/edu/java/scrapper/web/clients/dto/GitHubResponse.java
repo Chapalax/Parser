@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.dto;
+package ru.tinkoff.edu.java.scrapper.web.clients.dto;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
 import org.jetbrains.annotations.NotNull;
