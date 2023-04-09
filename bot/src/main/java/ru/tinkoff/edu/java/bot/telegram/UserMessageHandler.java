@@ -44,20 +44,24 @@ public class UserMessageHandler implements UserMessageProcessor {
         if (isReplyTrack(update)) {
             try {
                 scrapperClient.addLink(update.message().chat().id(), new AddLinkRequest(update.message().text()));
-                return new SendMessage(update.message().chat().id(), SUCCESSFUL_TRACK);
+                return createSendMessage(update, SUCCESSFUL_TRACK);
             } catch (ApiErrorResponse errorResponse) {
-                return new SendMessage(update.message().chat().id(), ERROR_MESSAGE);
+                return createSendMessage(update, ERROR_MESSAGE);
             }
         }
         if (isReplyUntrack(update)) {
             try {
                 scrapperClient.deleteLink(update.message().chat().id(), new RemoveLinkRequest(update.message().text()));
-                return new SendMessage(update.message().chat().id(), SUCCESSFUL_UNTRACK);
+                return createSendMessage(update, SUCCESSFUL_UNTRACK);
             } catch (ApiErrorResponse errorResponse) {
-                return new SendMessage(update.message().chat().id(), ERROR_MESSAGE);
+                return createSendMessage(update, ERROR_MESSAGE);
             }
         }
-        return new SendMessage(update.message().chat().id(), WARNING);
+        return createSendMessage(update, WARNING);
+    }
+
+    private SendMessage createSendMessage(Update update, String message) {
+        return new SendMessage(update.message().chat().id(), message);
     }
 
     private boolean isReplyTrack(Update update) {
