@@ -1,5 +1,4 @@
-CREATE SEQUENCE IF NOT EXISTS link_id_seq
-    OWNED BY links.id;
+CREATE SEQUENCE IF NOT EXISTS link_id_seq;
 
 CREATE TABLE IF NOT EXISTS links
 (
