@@ -7,3 +7,5 @@ CREATE TABLE IF NOT EXISTS links
     path TEXT NOT NULL,
     last_activity DATE NOT NULL DEFAULT now()
 );
+
+ALTER SEQUENCE link_id_seq OWNED BY links.id;
