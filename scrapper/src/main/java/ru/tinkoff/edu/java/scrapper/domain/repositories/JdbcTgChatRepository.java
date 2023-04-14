@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import ru.tinkoff.edu.java.scrapper.domain.interfaces.Dao;
 import ru.tinkoff.edu.java.scrapper.domain.models.TgChat;
 
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -32,7 +33,7 @@ public class JdbcTgChatRepository implements Dao<TgChat> {
     }
 
     @Override
-    public Iterable<TgChat> findAll() {
+    public List<TgChat> findAll() {
         return jdbcTemplate.query(SQL_FIND_ALL, rowMapper);
     }
 }

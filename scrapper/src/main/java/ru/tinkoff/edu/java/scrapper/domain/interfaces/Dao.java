@@ -1,9 +1,11 @@
 package ru.tinkoff.edu.java.scrapper.domain.interfaces;
 
+import java.util.List;
+
 public interface Dao<T> {
     int add(T object);
 
     int remove(T object);
 
-    Iterable<T> findAll();
+    List<T> findAll();
 }

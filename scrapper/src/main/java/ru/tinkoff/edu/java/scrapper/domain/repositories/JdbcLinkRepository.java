@@ -1,7 +1,6 @@
 package ru.tinkoff.edu.java.scrapper.domain.repositories;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -9,6 +8,7 @@ import ru.tinkoff.edu.java.scrapper.domain.interfaces.Dao;
 import ru.tinkoff.edu.java.scrapper.domain.mappers.LinkDataRowMapper;
 import ru.tinkoff.edu.java.scrapper.domain.models.Link;
 
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -36,7 +36,7 @@ public class JdbcLinkRepository implements Dao<Link> {
     }
 
     @Override
-    public Iterable<Link> findAll() {
+    public List<Link> findAll() {
         return jdbcTemplate.query(SQL_FIND_ALL, rowMapper);
     }
 }

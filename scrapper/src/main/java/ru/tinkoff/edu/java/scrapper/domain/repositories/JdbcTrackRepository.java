@@ -8,6 +8,7 @@ import ru.tinkoff.edu.java.scrapper.domain.interfaces.Dao;
 import ru.tinkoff.edu.java.scrapper.domain.mappers.TrackDataRowMapper;
 import ru.tinkoff.edu.java.scrapper.domain.models.Track;
 
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -35,7 +36,7 @@ public class JdbcTrackRepository implements Dao<Track> {
     }
 
     @Override
-    public Iterable<Track> findAll() {
+    public List<Track> findAll() {
         return jdbcTemplate.query(SQL_FIND_ALL, rowMapper);
     }
 }

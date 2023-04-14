@@ -21,11 +21,10 @@ import ru.tinkoff.edu.java.scrapper.domain.repositories.JdbcTrackRepository;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
-
-// TODO: fix and create tests
 
 @SpringBootTest(classes = ScrapperApplication.class)
 public class JdbcRepositoriesTest extends IntegrationEnvironment{
@@ -98,7 +97,7 @@ public class JdbcRepositoriesTest extends IntegrationEnvironment{
         Track track = createNewTrack(11L);
         tgChatRepository.add(createNewTgChat(11L));
         linkRepository.add(createNewLink(88));
-        track.setLinkId(linkRepository.findAll().iterator().next().getId());
+        track.setLinkId(linkRepository.findAll().get(0).getId());
 
         assertThat(trackRepository.add(track)).isEqualTo(1);
         assertThat(jdbcTemplate.query("SELECT * FROM tracking", trackRowMapper)
@@ -128,7 +127,7 @@ public class JdbcRepositoriesTest extends IntegrationEnvironment{
     @Rollback
     public void removeLinkTest() {
         linkRepository.add(createNewLink(2));
-        ArrayList<Link> links = (ArrayList<Link>) linkRepository.findAll();
+        List<Link> links = linkRepository.findAll();
 
         assertThat(linkRepository.remove(links.get(0))).isEqualTo(1);
 
@@ -146,7 +145,7 @@ public class JdbcRepositoriesTest extends IntegrationEnvironment{
         Track track = createNewTrack(22L);
         tgChatRepository.add(createNewTgChat(22L));
         linkRepository.add(createNewLink(123));
-        track.setLinkId(linkRepository.findAll().iterator().next().getId());
+        track.setLinkId(linkRepository.findAll().get(0).getId());
         trackRepository.add(track);
 
         assertThat(trackRepository.remove(track)).isEqualTo(1);
@@ -166,7 +165,7 @@ public class JdbcRepositoriesTest extends IntegrationEnvironment{
         tgChatRepository.add(createNewTgChat(111L));
         tgChatRepository.add(createNewTgChat(999L));
 
-        ArrayList<TgChat> tgChats = (ArrayList<TgChat>) tgChatRepository.findAll();
+        List<TgChat> tgChats = tgChatRepository.findAll();
 
         assertThat(tgChats.size()).isEqualTo(3);
         assertThat(tgChats.get(0).getId()).isEqualTo(555L);
@@ -182,7 +181,7 @@ public class JdbcRepositoriesTest extends IntegrationEnvironment{
         linkRepository.add(createNewLink(4));
         linkRepository.add(createNewLink(5));
 
-        ArrayList<Link> links = (ArrayList<Link>) linkRepository.findAll();
+        List<Link> links = linkRepository.findAll();
 
         assertThat(links.size()).isEqualTo(3);
         assertThat(links.get(0).getPath()).isEqualTo("/User/Repository3");
@@ -199,7 +198,7 @@ public class JdbcRepositoriesTest extends IntegrationEnvironment{
         linkRepository.add(createNewLink(163));
         linkRepository.add(createNewLink(777));
 
-        ArrayList<Link> links = (ArrayList<Link>) linkRepository.findAll();
+        List<Link> links = linkRepository.findAll();
         Track firstTrack = createNewTrack(33L);
         firstTrack.setLinkId(links.get(0).getId());
         Track secondTrack = createNewTrack(44L);
@@ -211,7 +210,7 @@ public class JdbcRepositoriesTest extends IntegrationEnvironment{
         trackRepository.add(secondTrack);
         trackRepository.add(thirdTrack);
 
-        ArrayList<Track> tracks = (ArrayList<Track>) trackRepository.findAll();
+        List<Track> tracks = trackRepository.findAll();
 
         assertThat(tracks.size()).isEqualTo(3);
         assertThat(tracks.get(0).getLinkId()).isEqualTo(firstTrack.getLinkId());
