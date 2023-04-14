@@ -18,7 +18,7 @@ public class ScrapperApplication {
         System.out.println(appConfig);
         System.out.println(clientConfig);
         var gitHubClient = ctx.getBean(GitHubClient.class, clientConfig.github());
-        System.out.println(gitHubClient.fetchGitHubRepository("Chapalax", "Parser"));
+        System.out.println(gitHubClient.fetchGitHubRepository("Chapalax", "TrackingBot"));
         var stackOverflowClient = ctx.getBean(StackOverflowClient.class, clientConfig.stackoverflow());
         System.out.println(stackOverflowClient.fetchStackOverflowQuestion("4963300"));
     }
