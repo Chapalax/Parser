@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.domain.models;
+package ru.tinkoff.edu.java.scrapper.models;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

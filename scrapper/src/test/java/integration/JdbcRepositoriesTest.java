@@ -12,15 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.ScrapperApplication;
 import ru.tinkoff.edu.java.scrapper.domain.mappers.LinkDataRowMapper;
 import ru.tinkoff.edu.java.scrapper.domain.mappers.TrackDataRowMapper;
-import ru.tinkoff.edu.java.scrapper.domain.models.Link;
-import ru.tinkoff.edu.java.scrapper.domain.models.TgChat;
-import ru.tinkoff.edu.java.scrapper.domain.models.Track;
+import ru.tinkoff.edu.java.scrapper.models.Link;
+import ru.tinkoff.edu.java.scrapper.models.TgChat;
+import ru.tinkoff.edu.java.scrapper.models.Track;
 import ru.tinkoff.edu.java.scrapper.domain.repositories.JdbcLinkRepository;
 import ru.tinkoff.edu.java.scrapper.domain.repositories.JdbcTgChatRepository;
 import ru.tinkoff.edu.java.scrapper.domain.repositories.JdbcTrackRepository;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
