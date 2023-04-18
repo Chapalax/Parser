@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.domain.repositories;
+package ru.tinkoff.edu.java.scrapper.domain.jdbc.repositories;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.DataClassRowMapper;

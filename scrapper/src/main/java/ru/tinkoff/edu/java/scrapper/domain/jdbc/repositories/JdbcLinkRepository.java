@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.domain.repositories;
+package ru.tinkoff.edu.java.scrapper.domain.jdbc.repositories;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.domain.interfaces.LinkRepository;
-import ru.tinkoff.edu.java.scrapper.domain.mappers.LinkDataRowMapper;
+import ru.tinkoff.edu.java.scrapper.domain.jdbc.mappers.LinkDataRowMapper;
 import ru.tinkoff.edu.java.scrapper.models.Link;
 
 import java.time.OffsetDateTime;
