@@ -59,7 +59,7 @@ public class JdbcLinkUpdater implements LinkUpdater {
                     botClient.sendUpdates(new LinkUpdateResponse(
                             link.getId(),
                             URI.create(link.getPath()),
-                            "has " + issuesDiff + " new issues!",
+                            "New issues: " + issuesDiff,
                             getUsers(link)));
                 } else if (ghResponse.issuesCount() < link.getActionCount()) {
                     var issuesDiff = link.getActionCount() - ghResponse.issuesCount();
@@ -69,7 +69,7 @@ public class JdbcLinkUpdater implements LinkUpdater {
                     botClient.sendUpdates(new LinkUpdateResponse(
                             link.getId(),
                             URI.create(link.getPath()),
-                            "has " + issuesDiff + " closed issues!",
+                            "Closed issues: " + issuesDiff,
                             getUsers(link)));
                 } else if (ghResponse.updatedAt().isAfter(link.getLastActivity())) {
                     link.setLastActivity(ghResponse.updatedAt());
@@ -77,7 +77,7 @@ public class JdbcLinkUpdater implements LinkUpdater {
                     botClient.sendUpdates(new LinkUpdateResponse(
                             link.getId(),
                             URI.create(link.getPath()),
-                            "has been updated!",
+                            "The repository has been updated!",
                             getUsers(link)));
                 }
 
@@ -93,7 +93,7 @@ public class JdbcLinkUpdater implements LinkUpdater {
                     botClient.sendUpdates(new LinkUpdateResponse(
                             link.getId(),
                             URI.create(link.getPath()),
-                            "has " + answersDiff + " new answers!",
+                            "New answers: " + answersDiff,
                             getUsers(link)));
                 } else if (soResponse.answersCount() < link.getActionCount()) {
                     var answersDiff = link.getActionCount() - soResponse.answersCount();
@@ -103,7 +103,7 @@ public class JdbcLinkUpdater implements LinkUpdater {
                     botClient.sendUpdates(new LinkUpdateResponse(
                             link.getId(),
                             URI.create(link.getPath()),
-                            "has " + answersDiff + " deleted answers!",
+                            "Deleted answers: " + answersDiff,
                             getUsers(link)));
                 } else if (soResponse.lastActivity().isAfter(link.getLastActivity())) {
                     link.setLastActivity(soResponse.lastActivity());
@@ -111,7 +111,7 @@ public class JdbcLinkUpdater implements LinkUpdater {
                     botClient.sendUpdates(new LinkUpdateResponse(
                             link.getId(),
                             URI.create(link.getPath()),
-                            "has been updated!",
+                            "The question has been updated!",
                             getUsers(link)));
                 }
             }

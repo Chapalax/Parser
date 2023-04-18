@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS links
     id BIGINT PRIMARY KEY DEFAULT nextval('link_id_seq'),
     path TEXT NOT NULL UNIQUE,
     last_activity TIMESTAMP NOT NULL DEFAULT now(),
-    action_count INT NOT NULL DEFAULT 0,
+    action_count INT NOT NULL,
     checked_at TIMESTAMP NOT NULL DEFAULT now()
 );
 

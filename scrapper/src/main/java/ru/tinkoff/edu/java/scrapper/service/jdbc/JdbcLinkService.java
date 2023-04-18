@@ -92,7 +92,7 @@ public class JdbcLinkService implements LinkService {
     }
 
     @Override
-    public void remove(long tgChatId, @NotNull URI url) {
+    public Link remove(long tgChatId, @NotNull URI url) {
         TgChat chat = new TgChat();
         chat.setId(tgChatId);
         if(!tgChatRepository.isExists(chat)) throw new ChatNotFoundException("Chat not found.");
@@ -108,6 +108,7 @@ public class JdbcLinkService implements LinkService {
         track.setLinkId(link.getId());
         if(trackRepository.remove(track) == 0) throw new LinkNotFoundException("Link not found.");
         if(!trackRepository.isTrackedByAnyone(link)) linkRepository.remove(link);
+        return link;
     }
 
     @Override

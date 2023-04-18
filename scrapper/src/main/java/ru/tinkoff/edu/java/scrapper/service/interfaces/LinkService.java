@@ -9,7 +9,7 @@ import java.util.List;
 public interface LinkService {
     Link add(long tgChatId, @NotNull URI url);
 
-    void remove(long tgChatId, @NotNull URI url);
+    Link remove(long tgChatId, @NotNull URI url);
 
     List<Link> listAll(long tgChatId);
 }

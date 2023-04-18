@@ -45,8 +45,7 @@ public class JdbcRepositoriesTest extends IntegrationEnvironment{
 
     private @NotNull Link createNewLink(int param) {
         Link link = new Link();
-        link.setDomain("https://github.com");
-        link.setPath("/User/Repository" + param);
+        link.setPath("https://github.com/User/Repository" + param);
         link.setLastActivity(OffsetDateTime.now());
         return link;
     }
@@ -69,7 +68,7 @@ public class JdbcRepositoriesTest extends IntegrationEnvironment{
     public void addTgChatTest() {
         TgChat tgChat = createNewTgChat(7777777L);
 
-        assertThat(tgChatRepository.add(tgChat)).isEqualTo(1);
+        assertThat(tgChatRepository.add(tgChat).getId()).isEqualTo(7777777L);
         assertThat(jdbcTemplate.query("SELECT * FROM chats", tgChatRowMapper)
                 .get(0)
                 .getId())
@@ -82,11 +81,11 @@ public class JdbcRepositoriesTest extends IntegrationEnvironment{
     public void addLinkTest() {
         Link link = createNewLink(1);
 
-        assertThat(linkRepository.add(link)).isEqualTo(1);
+        assertThat(linkRepository.add(link).getActionCount()).isEqualTo(0);
         assertThat(jdbcTemplate.query("SELECT * FROM links", linkRowMapper)
                 .get(0)
                 .getPath())
-                .isEqualTo("/User/Repository1");
+                .isEqualTo("https://github.com/User/Repository1");
     }
 
     @Test
@@ -98,7 +97,7 @@ public class JdbcRepositoriesTest extends IntegrationEnvironment{
         linkRepository.add(createNewLink(88));
         track.setLinkId(linkRepository.findAll().get(0).getId());
 
-        assertThat(trackRepository.add(track)).isEqualTo(1);
+        assertThat(trackRepository.add(track).getChatId()).isEqualTo(11L);
         assertThat(jdbcTemplate.query("SELECT * FROM tracking", trackRowMapper)
                 .get(0)
                 .getLinkId())
@@ -183,9 +182,9 @@ public class JdbcRepositoriesTest extends IntegrationEnvironment{
         List<Link> links = linkRepository.findAll();
 
         assertThat(links.size()).isEqualTo(3);
-        assertThat(links.get(0).getPath()).isEqualTo("/User/Repository3");
-        assertThat(links.get(1).getPath()).isEqualTo("/User/Repository4");
-        assertThat(links.get(2).getPath()).isEqualTo("/User/Repository5");
+        assertThat(links.get(0).getPath()).isEqualTo("https://github.com/User/Repository3");
+        assertThat(links.get(1).getPath()).isEqualTo("https://github.com/User/Repository4");
+        assertThat(links.get(2).getPath()).isEqualTo("https://github.com/User/Repository5");
     }
 
     @Test

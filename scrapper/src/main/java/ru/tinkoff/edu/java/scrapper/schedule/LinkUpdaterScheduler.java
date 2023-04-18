@@ -7,8 +7,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.scrapper.service.interfaces.LinkUpdater;
 
-import java.time.OffsetDateTime;
-
 @Component
 @Slf4j
 @EnableScheduling

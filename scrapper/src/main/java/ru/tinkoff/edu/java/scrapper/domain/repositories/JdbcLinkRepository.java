@@ -38,6 +38,7 @@ public class JdbcLinkRepository implements LinkRepository {
     @Override
     @Transactional
     public Link add(Link object) {
+        if (object.getActionCount() == null) object.setActionCount(0);
         return jdbcTemplate.queryForObject(SQL_ADD, new BeanPropertySqlParameterSource(object), rowMapper);
     }
 
