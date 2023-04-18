@@ -12,9 +12,10 @@ public class LinkDataRowMapper implements RowMapper<Link> {
     public Link mapRow(ResultSet rs, int rowNum) throws SQLException {
         Link link = new Link();
         link.setId(rs.getLong("id"));
-        link.setDomain(rs.getString("domain"));
         link.setPath(rs.getString("path"));
         link.setLastActivity(rs.getObject("last_activity", OffsetDateTime.class));
+        link.setActionCount(rs.getInt("action_count"));
+        link.setCheckedAt(rs.getObject("checked_at", OffsetDateTime.class));
         return link;
     }
 }

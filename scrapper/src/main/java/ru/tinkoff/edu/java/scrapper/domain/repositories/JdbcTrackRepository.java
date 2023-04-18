@@ -28,6 +28,7 @@ public class JdbcTrackRepository implements TrackRepository {
     private final String SQL_FIND_ALL_BY_ID = "SELECT * FROM tracking WHERE chat_id=:chatId";
     private final String SQL_IS_EXISTS = "SELECT EXISTS(SELECT 1 FROM tracking WHERE chat_id=:chatId AND link_id=:linkId)";
     private final String SQL_IS_TRACKED_BY = "SELECT EXISTS(SELECT * FROM tracking WHERE link_id=:linkId)";
+    private final String SQL_FIND_ALL_BY_LINK = "SELECT * FROM tracking WHERE link_id=:linkId";
 
     @Override
     @Transactional
@@ -66,7 +67,12 @@ public class JdbcTrackRepository implements TrackRepository {
 
     @Override
     @Transactional
-    public List<Track> findAllById(TgChat chat) {
+    public List<Track> findAllTracksByUser(TgChat chat) {
         return jdbcTemplate.query(SQL_FIND_ALL_BY_ID, Map.of("chatId", chat.getId()), rowMapper);
+    }
+
+    @Override
+    public List<Track> findAllTracksWithLink(Link link) {
+        return jdbcTemplate.query(SQL_FIND_ALL_BY_LINK, Map.of("linkId", link.getId()), rowMapper);
     }
 }

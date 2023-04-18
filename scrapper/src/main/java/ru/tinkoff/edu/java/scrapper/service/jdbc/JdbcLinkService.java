@@ -55,10 +55,9 @@ public class JdbcLinkService implements LinkService {
         if(record == null) throw new LinkNotFoundException("Link is not available now.");
 
         Link link = new Link();
-        link.setDomain(url.getHost());
+        link.setPath(url.getPath());
 
         if(record instanceof ParsedGitHub) {
-            link.setPath("/" + ((ParsedGitHub) record).user() + "/" + ((ParsedGitHub) record).repository());
             if(linkRepository.isExists(link)) {
                 link = linkRepository.findByUrl(link);
                 if(trackRepository.isTracked(chat, link)) throw new AddedLinkExistsException("Link already added.");
@@ -67,12 +66,12 @@ public class JdbcLinkService implements LinkService {
                         ((ParsedGitHub) record).user(),
                         ((ParsedGitHub) record).repository());
                 link.setLastActivity(response.updatedAt());
+                link.setActionCount(response.issuesCount());
                 link = linkRepository.add(link);
             }
         }
 
         if(record instanceof ParsedStackOverflow){
-            link.setPath("/questions/" + ((ParsedStackOverflow) record).id());
             if(linkRepository.isExists(link)) {
                 link = linkRepository.findByUrl(link);
                 if(trackRepository.isTracked(chat, link)) throw new AddedLinkExistsException("Link already added.");
@@ -80,6 +79,7 @@ public class JdbcLinkService implements LinkService {
                 StackOverflowResponse response = stackOverflowClient.fetchStackOverflowQuestion(
                         ((ParsedStackOverflow) record).id());
                 link.setLastActivity(response.lastActivity());
+                link.setActionCount(response.answersCount());
                 link = linkRepository.add(link);
             }
         }
@@ -95,17 +95,11 @@ public class JdbcLinkService implements LinkService {
     public void remove(long tgChatId, @NotNull URI url) {
         TgChat chat = new TgChat();
         chat.setId(tgChatId);
-
         if(!tgChatRepository.isExists(chat)) throw new ChatNotFoundException("Chat not found.");
         var record = ParserHandler.parse(url);
         if(record == null) throw new LinkNotFoundException("Link not found.");
-
         Link link = new Link();
-        link.setDomain(url.getHost());
-        if(record instanceof ParsedGitHub)
-            link.setPath("/" + ((ParsedGitHub) record).user() + "/" + ((ParsedGitHub) record).repository());
-        if(record instanceof ParsedStackOverflow)
-            link.setPath("/questions/" + ((ParsedStackOverflow) record).id());
+        link.setPath(url.getPath());
 
         if(!linkRepository.isExists(link)) throw new LinkNotFoundException("Link not found.");
         link = linkRepository.findByUrl(link);
@@ -123,7 +117,7 @@ public class JdbcLinkService implements LinkService {
         List<Link> links = new ArrayList<>();
 
         if(!tgChatRepository.isExists(chat)) throw new ChatNotFoundException("Chat not found.");
-        List<Track> allTracks = trackRepository.findAllById(chat);
+        List<Track> allTracks = trackRepository.findAllTracksByUser(chat);
         for(Track current : allTracks) {
             Link temp = new Link();
             temp.setId(current.getLinkId());

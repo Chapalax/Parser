@@ -9,7 +9,8 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 public class Link {
     private Long id;
-    private String domain;
     private String path;
     private OffsetDateTime lastActivity;
+    private Integer actionCount;
+    private OffsetDateTime checkedAt;
 }

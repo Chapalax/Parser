@@ -11,5 +11,7 @@ public interface TrackRepository extends Dao<Track> {
 
     Boolean isTrackedByAnyone(Link link);
 
-    List<Track> findAllById(TgChat chat);
+    List<Track> findAllTracksByUser(TgChat chat);
+
+    List<Track> findAllTracksWithLink(Link link);
 }
