@@ -88,6 +88,7 @@ public class JdbcLinkRepository implements LinkRepository {
         jdbcTemplate.update(SQL_UPDATE_LINK,
                 Map.of("lastActivity", link.getLastActivity(),
                         "actionCount", link.getActionCount(),
-                        "checkedAt", OffsetDateTime.now()));
+                        "checkedAt", OffsetDateTime.now(),
+                        "id", link.getId()));
     }
 }

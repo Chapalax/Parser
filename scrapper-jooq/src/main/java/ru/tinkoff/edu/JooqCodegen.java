@@ -14,6 +14,10 @@ public class JooqCodegen {
 
         Database database = new Database()
                 .withName("org.jooq.meta.postgres.PostgresDatabase")
+                .withProperties(
+                        new Property().withKey("rootPath").withValue("migrations"),
+                        new Property().withKey("scripts").withValue("master.xml")
+                )
                 .withIncludes(".*")
                 .withExcludes("")
                 .withInputSchema("public");
@@ -36,7 +40,7 @@ public class JooqCodegen {
                 .withPojos(true);
 
         Target target = new Target()
-                .withPackageName("ru.tinkoff.edu.java.scrapper.domain.jooq")
+                .withPackageName("ru.tinkoff.edu.java.scrapper.domain.jooq.generated")
                 .withDirectory("scrapper/src/main/java");
 
         Configuration configuration = new Configuration()
