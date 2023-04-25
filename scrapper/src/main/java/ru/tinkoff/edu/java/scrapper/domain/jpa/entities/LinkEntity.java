@@ -1,17 +1,13 @@
 package ru.tinkoff.edu.java.scrapper.domain.jpa.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Getter
-@Setter
-@EqualsAndHashCode(exclude = {"tracks"})
-@ToString(exclude = {"tracks"})
+@Data
 @NoArgsConstructor
 @Table(name = "links")
 public class LinkEntity {
@@ -32,7 +28,4 @@ public class LinkEntity {
 
     @Column(name = "checked_at", nullable = false)
     private OffsetDateTime checkedAt = OffsetDateTime.now();
-
-    @OneToMany(mappedBy = "linkId", orphanRemoval = true)
-    private List<TrackEntity> tracks = new ArrayList<>();
 }

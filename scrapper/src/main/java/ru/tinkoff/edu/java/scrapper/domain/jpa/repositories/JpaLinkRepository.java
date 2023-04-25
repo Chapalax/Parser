@@ -3,6 +3,7 @@ package ru.tinkoff.edu.java.scrapper.domain.jpa.repositories;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.domain.interfaces.LinkRepository;
 import ru.tinkoff.edu.java.scrapper.domain.jpa.entities.LinkEntity;
@@ -20,9 +21,10 @@ public class JpaLinkRepository implements LinkRepository {
     @Value("${check.interval}")
     private Long checkInterval;
 
+    @Lazy
     private final JpaLinkEntityRepository linkEntityRepository;
 
-    private final LinkEntityMapper mapper;
+    private final LinkEntityMapper mapper = new LinkEntityMapper();
 
     @Override
     @Transactional

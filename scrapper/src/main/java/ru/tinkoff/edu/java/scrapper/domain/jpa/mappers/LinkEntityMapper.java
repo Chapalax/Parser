@@ -1,11 +1,9 @@
 package ru.tinkoff.edu.java.scrapper.domain.jpa.mappers;
 
 import org.jetbrains.annotations.NotNull;
-import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.scrapper.domain.jpa.entities.LinkEntity;
 import ru.tinkoff.edu.java.scrapper.domain.models.Link;
 
-@Component
 public class LinkEntityMapper {
     public Link map(@NotNull LinkEntity entity) {
         Link link = new Link();

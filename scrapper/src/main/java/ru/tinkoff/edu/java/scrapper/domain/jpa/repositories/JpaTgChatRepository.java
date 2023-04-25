@@ -2,6 +2,7 @@ package ru.tinkoff.edu.java.scrapper.domain.jpa.repositories;
 
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.context.annotation.Lazy;
 import ru.tinkoff.edu.java.scrapper.domain.interfaces.TgChatRepository;
 import ru.tinkoff.edu.java.scrapper.domain.jpa.generated.JpaTgChatEntityRepository;
 import ru.tinkoff.edu.java.scrapper.domain.jpa.mappers.TgChatEntityMapper;
@@ -12,9 +13,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JpaTgChatRepository implements TgChatRepository {
 
+    @Lazy
     private final JpaTgChatEntityRepository tgChatEntityRepository;
 
-    private final TgChatEntityMapper mapper;
+    private final TgChatEntityMapper mapper = new TgChatEntityMapper();
 
     @Override
     public TgChat add(@NotNull TgChat object) {

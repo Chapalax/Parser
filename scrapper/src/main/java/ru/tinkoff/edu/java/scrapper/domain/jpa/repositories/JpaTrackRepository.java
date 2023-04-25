@@ -2,6 +2,7 @@ package ru.tinkoff.edu.java.scrapper.domain.jpa.repositories;
 
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.domain.interfaces.TrackRepository;
 import ru.tinkoff.edu.java.scrapper.domain.jpa.entities.TrackPrimaryKey;
@@ -16,9 +17,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JpaTrackRepository implements TrackRepository {
 
+    @Lazy
     private final JpaTrackEntityRepository trackEntityRepository;
 
-    private final TrackEntityMapper mapper;
+    private final TrackEntityMapper mapper = new TrackEntityMapper();
 
     @Override
     @Transactional

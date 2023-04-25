@@ -1,23 +1,18 @@
 package ru.tinkoff.edu.java.scrapper.domain.jpa.entities;
 
-import jakarta.persistence.*;
-import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Getter
-@Setter
-@EqualsAndHashCode(exclude = {"tracks"})
-@ToString(exclude = {"tracks"})
+@Data
 @NoArgsConstructor
 @Table(name = "chats")
 public class TgChatEntity {
     @Id
     @Column(name = "id")
     private Long id;
-
-    @OneToMany(mappedBy = "chatId", orphanRemoval = true)
-    private List<TrackEntity> tracks = new ArrayList<>();
 }
