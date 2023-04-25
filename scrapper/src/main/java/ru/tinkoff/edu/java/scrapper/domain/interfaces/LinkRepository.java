@@ -1,6 +1,6 @@
 package ru.tinkoff.edu.java.scrapper.domain.interfaces;
 
-import ru.tinkoff.edu.java.scrapper.models.Link;
+import ru.tinkoff.edu.java.scrapper.domain.models.Link;
 
 import java.util.List;
 

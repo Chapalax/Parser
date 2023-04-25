@@ -1,6 +1,7 @@
 package ru.tinkoff.edu.java.scrapper.domain.jdbc.repositories;
 
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.domain.interfaces.LinkRepository;
 import ru.tinkoff.edu.java.scrapper.domain.jdbc.mappers.LinkDataRowMapper;
-import ru.tinkoff.edu.java.scrapper.models.Link;
+import ru.tinkoff.edu.java.scrapper.domain.models.Link;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -37,14 +38,13 @@ public class JdbcLinkRepository implements LinkRepository {
 
     @Override
     @Transactional
-    public Link add(Link object) {
-        if (object.getActionCount() == null) object.setActionCount(0);
+    public Link add(@NotNull Link object) {
         return jdbcTemplate.queryForObject(SQL_ADD, new BeanPropertySqlParameterSource(object), rowMapper);
     }
 
     @Override
     @Transactional
-    public int remove(Link object) {
+    public int remove(@NotNull Link object) {
         return jdbcTemplate.update(SQL_REMOVE, Map.of("path", object.getPath()));
     }
 
@@ -56,19 +56,19 @@ public class JdbcLinkRepository implements LinkRepository {
 
     @Override
     @Transactional
-    public Boolean isExists(Link link) {
+    public Boolean isExists(@NotNull Link link) {
         return jdbcTemplate.queryForObject(SQL_IS_EXISTS, Map.of("path", link.getPath()), Boolean.class);
     }
 
     @Override
     @Transactional
-    public Link findByUrl(Link link) {
+    public Link findByUrl(@NotNull Link link) {
         return jdbcTemplate.queryForObject(SQL_FIND_ONE_BY_URL, new BeanPropertySqlParameterSource(link), rowMapper);
     }
 
     @Override
     @Transactional
-    public Link findById(Link link) {
+    public Link findById(@NotNull Link link) {
         return jdbcTemplate.queryForObject(SQL_FIND_ONE_BY_ID, new BeanPropertySqlParameterSource(link), rowMapper);
     }
 
@@ -84,7 +84,8 @@ public class JdbcLinkRepository implements LinkRepository {
     }
 
     @Override
-    public void update(Link link) {
+    @Transactional
+    public void update(@NotNull Link link) {
         jdbcTemplate.update(SQL_UPDATE_LINK,
                 Map.of("lastActivity", link.getLastActivity(),
                         "actionCount", link.getActionCount(),

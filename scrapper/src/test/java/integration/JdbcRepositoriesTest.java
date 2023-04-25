@@ -12,12 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.ScrapperApplication;
 import ru.tinkoff.edu.java.scrapper.domain.jdbc.mappers.LinkDataRowMapper;
 import ru.tinkoff.edu.java.scrapper.domain.jdbc.mappers.TrackDataRowMapper;
-import ru.tinkoff.edu.java.scrapper.models.Link;
-import ru.tinkoff.edu.java.scrapper.models.TgChat;
-import ru.tinkoff.edu.java.scrapper.models.Track;
 import ru.tinkoff.edu.java.scrapper.domain.jdbc.repositories.JdbcLinkRepository;
 import ru.tinkoff.edu.java.scrapper.domain.jdbc.repositories.JdbcTgChatRepository;
 import ru.tinkoff.edu.java.scrapper.domain.jdbc.repositories.JdbcTrackRepository;
+import ru.tinkoff.edu.java.scrapper.domain.models.Link;
+import ru.tinkoff.edu.java.scrapper.domain.models.TgChat;
+import ru.tinkoff.edu.java.scrapper.domain.models.Track;
 
 import java.time.OffsetDateTime;
 import java.util.List;

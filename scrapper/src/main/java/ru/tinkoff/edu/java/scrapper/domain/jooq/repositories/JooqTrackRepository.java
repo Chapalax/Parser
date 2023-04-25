@@ -1,14 +1,16 @@
 package ru.tinkoff.edu.java.scrapper.domain.jooq.repositories;
 
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
 import org.jooq.exception.DataAccessException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.domain.interfaces.TrackRepository;
 import ru.tinkoff.edu.java.scrapper.domain.jooq.generated.tables.Tracking;
-import ru.tinkoff.edu.java.scrapper.models.Link;
-import ru.tinkoff.edu.java.scrapper.models.TgChat;
-import ru.tinkoff.edu.java.scrapper.models.Track;
+import ru.tinkoff.edu.java.scrapper.domain.models.Link;
+import ru.tinkoff.edu.java.scrapper.domain.models.TgChat;
+import ru.tinkoff.edu.java.scrapper.domain.models.Track;
 
 import java.util.List;
 
@@ -19,7 +21,8 @@ public class JooqTrackRepository implements TrackRepository {
     private final DSLContext dsl;
 
     @Override
-    public Track add(Track object) {
+    @Transactional
+    public Track add(@NotNull Track object) {
         return dsl.insertInto(Tracking.TRACKING)
                 .set(dsl.newRecord(Tracking.TRACKING, object))
                 .returning()
@@ -30,7 +33,8 @@ public class JooqTrackRepository implements TrackRepository {
     }
 
     @Override
-    public int remove(Track object) {
+    @Transactional
+    public int remove(@NotNull Track object) {
         return dsl.deleteFrom(Tracking.TRACKING)
                 .where(Tracking.TRACKING.CHAT_ID.eq(object.getChatId()))
                 .and(Tracking.TRACKING.LINK_ID.eq(object.getLinkId()))
@@ -38,6 +42,7 @@ public class JooqTrackRepository implements TrackRepository {
     }
 
     @Override
+    @Transactional
     public List<Track> findAll() {
         return dsl.selectFrom(Tracking.TRACKING)
                 .stream()
@@ -51,7 +56,8 @@ public class JooqTrackRepository implements TrackRepository {
     }
 
     @Override
-    public Boolean isTracked(TgChat chat, Link link) {
+    @Transactional
+    public Boolean isTracked(@NotNull TgChat chat, @NotNull Link link) {
         return dsl.fetchExists(
                 dsl.selectOne()
                         .from(Tracking.TRACKING)
@@ -61,7 +67,8 @@ public class JooqTrackRepository implements TrackRepository {
     }
 
     @Override
-    public Boolean isTrackedByAnyone(Link link) {
+    @Transactional
+    public Boolean isTrackedByAnyone(@NotNull Link link) {
         return dsl.fetchExists(
                 dsl.selectFrom(Tracking.TRACKING)
                         .where(Tracking.TRACKING.LINK_ID.eq(link.getId()))
@@ -69,7 +76,8 @@ public class JooqTrackRepository implements TrackRepository {
     }
 
     @Override
-    public List<Track> findAllTracksByUser(TgChat chat) {
+    @Transactional
+    public List<Track> findAllTracksByUser(@NotNull TgChat chat) {
         return findAll()
                 .stream()
                 .filter(track -> track.getChatId().equals(chat.getId()))
@@ -77,7 +85,8 @@ public class JooqTrackRepository implements TrackRepository {
     }
 
     @Override
-    public List<Track> findAllTracksWithLink(Link link) {
+    @Transactional
+    public List<Track> findAllTracksWithLink(@NotNull Link link) {
         return findAll()
                 .stream()
                 .filter(track -> track.getLinkId().equals(link.getId()))

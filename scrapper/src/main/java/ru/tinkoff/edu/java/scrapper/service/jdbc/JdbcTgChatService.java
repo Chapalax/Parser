@@ -1,22 +1,18 @@
 package ru.tinkoff.edu.java.scrapper.service.jdbc;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.edu.java.scrapper.domain.interfaces.TgChatRepository;
 import ru.tinkoff.edu.java.scrapper.exceptions.ChatNotFoundException;
 import ru.tinkoff.edu.java.scrapper.exceptions.RegisteredUserExistsException;
-import ru.tinkoff.edu.java.scrapper.models.TgChat;
+import ru.tinkoff.edu.java.scrapper.domain.models.TgChat;
 import ru.tinkoff.edu.java.scrapper.service.interfaces.TgChatService;
 
 @Service
+@RequiredArgsConstructor
 public class JdbcTgChatService implements TgChatService {
 
     private final TgChatRepository tgChatRepository;
-
-    @Autowired
-    public JdbcTgChatService(TgChatRepository tgChatRepository) {
-        this.tgChatRepository = tgChatRepository;
-    }
 
     @Override
     public void register(long tgChatId) {

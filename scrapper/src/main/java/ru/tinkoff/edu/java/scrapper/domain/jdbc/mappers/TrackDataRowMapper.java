@@ -1,7 +1,7 @@
 package ru.tinkoff.edu.java.scrapper.domain.jdbc.mappers;
 
 import org.springframework.jdbc.core.RowMapper;
-import ru.tinkoff.edu.java.scrapper.models.Track;
+import ru.tinkoff.edu.java.scrapper.domain.models.Track;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

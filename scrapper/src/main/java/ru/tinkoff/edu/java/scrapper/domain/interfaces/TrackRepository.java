@@ -1,8 +1,8 @@
 package ru.tinkoff.edu.java.scrapper.domain.interfaces;
 
-import ru.tinkoff.edu.java.scrapper.models.Link;
-import ru.tinkoff.edu.java.scrapper.models.TgChat;
-import ru.tinkoff.edu.java.scrapper.models.Track;
+import ru.tinkoff.edu.java.scrapper.domain.models.Link;
+import ru.tinkoff.edu.java.scrapper.domain.models.TgChat;
+import ru.tinkoff.edu.java.scrapper.domain.models.Track;
 
 import java.util.List;
 

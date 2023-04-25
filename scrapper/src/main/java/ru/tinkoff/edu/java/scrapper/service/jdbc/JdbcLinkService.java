@@ -1,7 +1,7 @@
 package ru.tinkoff.edu.java.scrapper.service.jdbc;
 
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.edu.java.linkparser.parsers.ParserHandler;
 import ru.tinkoff.edu.java.linkparser.records.ParsedGitHub;
@@ -12,9 +12,9 @@ import ru.tinkoff.edu.java.scrapper.domain.interfaces.TrackRepository;
 import ru.tinkoff.edu.java.scrapper.exceptions.AddedLinkExistsException;
 import ru.tinkoff.edu.java.scrapper.exceptions.ChatNotFoundException;
 import ru.tinkoff.edu.java.scrapper.exceptions.LinkNotFoundException;
-import ru.tinkoff.edu.java.scrapper.models.Link;
-import ru.tinkoff.edu.java.scrapper.models.TgChat;
-import ru.tinkoff.edu.java.scrapper.models.Track;
+import ru.tinkoff.edu.java.scrapper.domain.models.Link;
+import ru.tinkoff.edu.java.scrapper.domain.models.TgChat;
+import ru.tinkoff.edu.java.scrapper.domain.models.Track;
 import ru.tinkoff.edu.java.scrapper.service.interfaces.LinkService;
 import ru.tinkoff.edu.java.scrapper.web.clients.dto.GitHubResponse;
 import ru.tinkoff.edu.java.scrapper.web.clients.dto.StackOverflowResponse;
@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class JdbcLinkService implements LinkService {
 
     private final LinkRepository linkRepository;
@@ -33,17 +34,6 @@ public class JdbcLinkService implements LinkService {
     private final TrackRepository trackRepository;
     private final WebClientGitHub gitHubClient;
     private final WebClientStackOverflow stackOverflowClient;
-
-    @Autowired
-    public JdbcLinkService(LinkRepository linkRepository, TgChatRepository tgChatRepository,
-                           TrackRepository trackRepository, WebClientGitHub gitHubClient,
-                           WebClientStackOverflow stackOverflowClient) {
-        this.linkRepository = linkRepository;
-        this.tgChatRepository = tgChatRepository;
-        this.trackRepository = trackRepository;
-        this.gitHubClient = gitHubClient;
-        this.stackOverflowClient = stackOverflowClient;
-    }
 
     @Override
     public Link add(long tgChatId, @NotNull URI url) {

@@ -1,15 +1,15 @@
 package ru.tinkoff.edu.java.scrapper.service.jdbc;
 
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.edu.java.linkparser.parsers.ParserHandler;
 import ru.tinkoff.edu.java.linkparser.records.ParsedGitHub;
 import ru.tinkoff.edu.java.linkparser.records.ParsedStackOverflow;
 import ru.tinkoff.edu.java.scrapper.domain.interfaces.LinkRepository;
 import ru.tinkoff.edu.java.scrapper.domain.interfaces.TrackRepository;
-import ru.tinkoff.edu.java.scrapper.models.Link;
-import ru.tinkoff.edu.java.scrapper.models.Track;
+import ru.tinkoff.edu.java.scrapper.domain.models.Link;
+import ru.tinkoff.edu.java.scrapper.domain.models.Track;
 import ru.tinkoff.edu.java.scrapper.service.interfaces.LinkUpdater;
 import ru.tinkoff.edu.java.scrapper.web.clients.dto.GitHubResponse;
 import ru.tinkoff.edu.java.scrapper.web.clients.dto.LinkUpdateResponse;
@@ -19,10 +19,12 @@ import ru.tinkoff.edu.java.scrapper.web.clients.interfaces.WebClientGitHub;
 import ru.tinkoff.edu.java.scrapper.web.clients.interfaces.WebClientStackOverflow;
 
 import java.net.URI;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class JdbcLinkUpdater implements LinkUpdater {
 
     private final WebClientBot botClient;
@@ -31,21 +33,11 @@ public class JdbcLinkUpdater implements LinkUpdater {
     private final LinkRepository linkRepository;
     private final TrackRepository trackRepository;
 
-    @Autowired
-    public JdbcLinkUpdater(WebClientBot botClient, WebClientGitHub gitHubClient,
-                           WebClientStackOverflow stackOverflowClient, LinkRepository linkRepository,
-                           TrackRepository trackRepository) {
-        this.botClient = botClient;
-        this.gitHubClient = gitHubClient;
-        this.stackOverflowClient = stackOverflowClient;
-        this.linkRepository = linkRepository;
-        this.trackRepository = trackRepository;
-    }
-
     @Override
     public void update() {
         List<Link> linksToUpdate = linkRepository.findAllToUpdate();
         for (Link link : linksToUpdate) {
+            link.setCheckedAt(OffsetDateTime.now());
             var record = ParserHandler.parse(URI.create(link.getPath()));
             if (record instanceof ParsedGitHub) {
                 GitHubResponse ghResponse = gitHubClient.fetchGitHubRepository(

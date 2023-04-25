@@ -1,6 +1,7 @@
 package ru.tinkoff.edu.java.scrapper.domain.jdbc.repositories;
 
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -8,9 +9,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.domain.interfaces.TrackRepository;
 import ru.tinkoff.edu.java.scrapper.domain.jdbc.mappers.TrackDataRowMapper;
-import ru.tinkoff.edu.java.scrapper.models.Link;
-import ru.tinkoff.edu.java.scrapper.models.TgChat;
-import ru.tinkoff.edu.java.scrapper.models.Track;
+import ru.tinkoff.edu.java.scrapper.domain.models.Link;
+import ru.tinkoff.edu.java.scrapper.domain.models.TgChat;
+import ru.tinkoff.edu.java.scrapper.domain.models.Track;
 
 import java.util.List;
 import java.util.Map;
@@ -30,13 +31,13 @@ public class JdbcTrackRepository implements TrackRepository {
 
     @Override
     @Transactional
-    public Track add(Track object) {
+    public Track add(@NotNull Track object) {
         return jdbcTemplate.queryForObject(SQL_ADD, new BeanPropertySqlParameterSource(object), rowMapper);
     }
 
     @Override
     @Transactional
-    public int remove(Track object) {
+    public int remove(@NotNull Track object) {
         return jdbcTemplate.update(SQL_REMOVE,
                 Map.of("chatId", object.getChatId(),
                         "linkId", object.getLinkId()));
@@ -50,7 +51,7 @@ public class JdbcTrackRepository implements TrackRepository {
 
     @Override
     @Transactional
-    public Boolean isTracked(TgChat chat, Link link) {
+    public Boolean isTracked(@NotNull TgChat chat, @NotNull Link link) {
         return jdbcTemplate.queryForObject(SQL_IS_EXISTS,
                 Map.of("chatId", chat.getId(),
                         "linkId", link.getId()),
@@ -59,13 +60,13 @@ public class JdbcTrackRepository implements TrackRepository {
 
     @Override
     @Transactional
-    public Boolean isTrackedByAnyone(Link link) {
+    public Boolean isTrackedByAnyone(@NotNull Link link) {
         return jdbcTemplate.queryForObject(SQL_IS_TRACKED_BY, Map.of("linkId", link.getId()), Boolean.class);
     }
 
     @Override
     @Transactional
-    public List<Track> findAllTracksByUser(TgChat chat) {
+    public List<Track> findAllTracksByUser(@NotNull TgChat chat) {
         return findAll()
                 .stream()
                 .filter(track -> track.getChatId().equals(chat.getId()))
@@ -74,7 +75,7 @@ public class JdbcTrackRepository implements TrackRepository {
 
     @Override
     @Transactional
-    public List<Track> findAllTracksWithLink(Link link) {
+    public List<Track> findAllTracksWithLink(@NotNull Link link) {
         return findAll()
                 .stream()
                 .filter(track -> track.getLinkId().equals(link.getId()))
