@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
 import org.jooq.exception.DataAccessException;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.domain.interfaces.TrackRepository;
 import ru.tinkoff.edu.java.scrapper.domain.jooq.generated.tables.Tracking;
@@ -14,7 +13,6 @@ import ru.tinkoff.edu.java.scrapper.domain.models.Track;
 
 import java.util.List;
 
-@Repository
 @RequiredArgsConstructor
 public class JooqTrackRepository implements TrackRepository {
 

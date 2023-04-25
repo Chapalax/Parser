@@ -2,7 +2,6 @@ package ru.tinkoff.edu.java.scrapper.domain.jpa.repositories;
 
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.stereotype.Repository;
 import ru.tinkoff.edu.java.scrapper.domain.interfaces.TgChatRepository;
 import ru.tinkoff.edu.java.scrapper.domain.jpa.generated.JpaTgChatEntityRepository;
 import ru.tinkoff.edu.java.scrapper.domain.jpa.mappers.TgChatEntityMapper;
@@ -10,7 +9,6 @@ import ru.tinkoff.edu.java.scrapper.domain.models.TgChat;
 
 import java.util.List;
 
-@Repository
 @RequiredArgsConstructor
 public class JpaTgChatRepository implements TgChatRepository {
 

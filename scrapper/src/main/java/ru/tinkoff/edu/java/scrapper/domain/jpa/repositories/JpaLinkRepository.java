@@ -3,10 +3,9 @@ package ru.tinkoff.edu.java.scrapper.domain.jpa.repositories;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.tinkoff.edu.java.scrapper.domain.jpa.entities.LinkEntity;
 import ru.tinkoff.edu.java.scrapper.domain.interfaces.LinkRepository;
+import ru.tinkoff.edu.java.scrapper.domain.jpa.entities.LinkEntity;
 import ru.tinkoff.edu.java.scrapper.domain.jpa.generated.JpaLinkEntityRepository;
 import ru.tinkoff.edu.java.scrapper.domain.jpa.mappers.LinkEntityMapper;
 import ru.tinkoff.edu.java.scrapper.domain.models.Link;
@@ -15,7 +14,6 @@ import ru.tinkoff.edu.java.scrapper.exceptions.LinkNotFoundException;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-@Repository
 @RequiredArgsConstructor
 public class JpaLinkRepository implements LinkRepository {
 
