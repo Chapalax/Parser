@@ -4,10 +4,13 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.BotCommand;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SetMyCommands;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import ru.tinkoff.edu.java.bot.dto.LinkUpdateRequest;
 import ru.tinkoff.edu.java.bot.telegram.interfaces.Bot;
 import ru.tinkoff.edu.java.bot.telegram.interfaces.Command;
 import ru.tinkoff.edu.java.bot.telegram.interfaces.UserMessageProcessor;
@@ -18,9 +21,7 @@ import java.util.List;
 public class TrackerBot implements Bot {
     private static TelegramBot bot;
 
-    private static UserMessageProcessor userMessageProcessor;
-
-    private static String token;
+    private final UserMessageProcessor userMessageProcessor;
 
     @Autowired
     public TrackerBot(UserMessageProcessor messageProcessor, @Value("${app.token}") String token) {
@@ -44,10 +45,18 @@ public class TrackerBot implements Bot {
     }
 
     @Override
-    public int process(List<Update> list) {
+    public int process(@NotNull List<Update> list) {
         for (Update update : list) {
             bot.execute(userMessageProcessor.process(update));
         }
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
+    }
+
+    public static void sendUpdates(@NotNull LinkUpdateRequest updates) {
+        for (Long tgChatId : updates.tgChatIds()) {
+            bot.execute(new SendMessage(
+                    tgChatId,
+                    "New changes in: " + updates.url() + "\n" + updates.description()));
+        }
     }
 }

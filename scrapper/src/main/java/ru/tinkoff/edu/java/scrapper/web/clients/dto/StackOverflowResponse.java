@@ -6,5 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import java.time.OffsetDateTime;
 
 public record StackOverflowResponse(@NotNull String link,
-                                    @NotNull @JsonSetter("last_activity_date")OffsetDateTime lastActivity) {
+                                    @NotNull @JsonSetter("last_activity_date") OffsetDateTime lastActivity,
+                                    @NotNull @JsonSetter("answer_count") Integer answersCount) {
 }

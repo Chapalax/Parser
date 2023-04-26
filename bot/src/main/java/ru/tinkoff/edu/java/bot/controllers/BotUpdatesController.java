@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.tinkoff.edu.java.bot.dto.LinkUpdateRequest;
+import ru.tinkoff.edu.java.bot.telegram.TrackerBot;
 
 @RestController
 @RequestMapping("/updates")
@@ -15,13 +16,8 @@ public class BotUpdatesController {
 
     @PostMapping
     public ResponseEntity<HttpStatus> postSendUpdate(@RequestBody @Valid LinkUpdateRequest linkUpdate){
-        try {
-            // TODO logic
-            return ResponseEntity.ok(HttpStatus.OK);
-        } catch (Exception e){
-            // TODO throw
-            throw new RuntimeException();
-        }
+        TrackerBot.sendUpdates(linkUpdate);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }
 

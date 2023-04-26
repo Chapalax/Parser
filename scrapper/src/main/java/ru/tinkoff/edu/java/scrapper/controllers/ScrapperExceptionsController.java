@@ -21,7 +21,9 @@ import java.util.ArrayList;
 import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
-public class ScrapperExceptionController {
+public class ScrapperExceptionsController {
+
+    // TODO: fix
 
     private ApiErrorResponse createError(Throwable exception, String description, HttpStatus httpStatus) {
         ArrayList<String> stacktrace = new ArrayList<>(exception.getStackTrace().length);
@@ -51,7 +53,7 @@ public class ScrapperExceptionController {
     @ExceptionHandler(MissingRequestHeaderException.class)
     public ResponseEntity<ApiErrorResponse> missingRequestHeader(@NotNull MissingRequestHeaderException error) {
         return ResponseEntity.status(BAD_REQUEST)
-                .body(createError(error, "Incorrect header", BAD_REQUEST));
+                .body(createError(error, "Incorrect Header", BAD_REQUEST));
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -79,9 +81,10 @@ public class ScrapperExceptionController {
     }
 
     @ExceptionHandler(RegisteredUserExistsException.class)
-    public ResponseEntity<ApiErrorResponse> registeredUserExists(@NotNull RegisteredUserExistsException error) {
-        return ResponseEntity.status(METHOD_NOT_ALLOWED)
-                .body(createError(error, "This User Is Already Registered", METHOD_NOT_ALLOWED));
+    public HttpStatus registeredUserExists(@NotNull RegisteredUserExistsException error) {
+        return OK;
+        // return ResponseEntity.status(OK)
+        //        .body(createError(error, "This User Is Already Registered", METHOD_NOT_ALLOWED));
     }
 
     @ExceptionHandler(Exception.class)
