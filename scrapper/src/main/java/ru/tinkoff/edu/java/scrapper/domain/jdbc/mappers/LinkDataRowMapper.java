@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.domain.mappers;
+package ru.tinkoff.edu.java.scrapper.domain.jdbc.mappers;
 
 import org.springframework.jdbc.core.RowMapper;
 import ru.tinkoff.edu.java.scrapper.models.Link;

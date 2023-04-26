@@ -40,7 +40,7 @@ public class TrackerBot implements Bot {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
         bot.removeGetUpdatesListener();
     }
 

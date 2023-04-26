@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.domain.repositories;
+package ru.tinkoff.edu.java.scrapper.domain.jdbc.repositories;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.RowMapper;
@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.domain.interfaces.TrackRepository;
-import ru.tinkoff.edu.java.scrapper.domain.mappers.TrackDataRowMapper;
+import ru.tinkoff.edu.java.scrapper.domain.jdbc.mappers.TrackDataRowMapper;
 import ru.tinkoff.edu.java.scrapper.models.Link;
 import ru.tinkoff.edu.java.scrapper.models.TgChat;
 import ru.tinkoff.edu.java.scrapper.models.Track;
@@ -25,10 +25,8 @@ public class JdbcTrackRepository implements TrackRepository {
     private final String SQL_ADD = "INSERT INTO tracking (chat_id, link_id) VALUES (:chatId, :linkId) RETURNING *";
     private final String SQL_REMOVE = "DELETE FROM tracking WHERE chat_id=:chatId AND link_id=:linkId";
     private final String SQL_FIND_ALL = "SELECT * FROM tracking";
-    private final String SQL_FIND_ALL_BY_ID = "SELECT * FROM tracking WHERE chat_id=:chatId";
     private final String SQL_IS_EXISTS = "SELECT EXISTS(SELECT 1 FROM tracking WHERE chat_id=:chatId AND link_id=:linkId)";
     private final String SQL_IS_TRACKED_BY = "SELECT EXISTS(SELECT * FROM tracking WHERE link_id=:linkId)";
-    private final String SQL_FIND_ALL_BY_LINK = "SELECT * FROM tracking WHERE link_id=:linkId";
 
     @Override
     @Transactional
@@ -68,11 +66,18 @@ public class JdbcTrackRepository implements TrackRepository {
     @Override
     @Transactional
     public List<Track> findAllTracksByUser(TgChat chat) {
-        return jdbcTemplate.query(SQL_FIND_ALL_BY_ID, Map.of("chatId", chat.getId()), rowMapper);
+        return findAll()
+                .stream()
+                .filter(track -> track.getChatId().equals(chat.getId()))
+                .toList();
     }
 
     @Override
+    @Transactional
     public List<Track> findAllTracksWithLink(Link link) {
-        return jdbcTemplate.query(SQL_FIND_ALL_BY_LINK, Map.of("linkId", link.getId()), rowMapper);
+        return findAll()
+                .stream()
+                .filter(track -> track.getLinkId().equals(link.getId()))
+                .toList();
     }
 }
