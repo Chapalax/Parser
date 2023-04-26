@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.service.jdbc;
+package ru.tinkoff.edu.java.scrapper.service;
 
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +15,6 @@ import ru.tinkoff.edu.java.scrapper.exceptions.LinkNotFoundException;
 import ru.tinkoff.edu.java.scrapper.domain.models.Link;
 import ru.tinkoff.edu.java.scrapper.domain.models.TgChat;
 import ru.tinkoff.edu.java.scrapper.domain.models.Track;
-import ru.tinkoff.edu.java.scrapper.service.interfaces.LinkService;
 import ru.tinkoff.edu.java.scrapper.web.clients.dto.GitHubResponse;
 import ru.tinkoff.edu.java.scrapper.web.clients.dto.StackOverflowResponse;
 import ru.tinkoff.edu.java.scrapper.web.clients.interfaces.WebClientGitHub;
@@ -27,7 +26,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class JdbcLinkService implements LinkService {
+public class LinkService implements ru.tinkoff.edu.java.scrapper.service.interfaces.LinkService {
 
     private final LinkRepository linkRepository;
     private final TgChatRepository tgChatRepository;

@@ -13,7 +13,7 @@ import ru.tinkoff.edu.java.scrapper.domain.jooq.mappers.LinkRecordMapper;
 import ru.tinkoff.edu.java.scrapper.domain.jooq.mappers.LinkRecordUnmapper;
 import ru.tinkoff.edu.java.scrapper.domain.models.Link;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -89,11 +89,10 @@ public class JooqLinkRepository implements LinkRepository {
     @Override
     @Transactional
     public List<Link> findAllToUpdate() {
-        return findAll()
+        return dsl.selectFrom(Links.LINKS)
+                .where(Links.LINKS.CHECKED_AT.le(LocalDateTime.now().minusMinutes(checkInterval)))
                 .stream()
-                .filter(link -> link
-                        .getCheckedAt()
-                        .isBefore(OffsetDateTime.now().minusMinutes(checkInterval)))
+                .map(recordMapper::map)
                 .toList();
     }
 

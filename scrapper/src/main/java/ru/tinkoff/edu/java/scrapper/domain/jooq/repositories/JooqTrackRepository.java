@@ -76,18 +76,30 @@ public class JooqTrackRepository implements TrackRepository {
     @Override
     @Transactional
     public List<Track> findAllTracksByUser(@NotNull TgChat chat) {
-        return findAll()
+        return dsl.selectFrom(Tracking.TRACKING)
+                .where(Tracking.TRACKING.CHAT_ID.eq(chat.getId()))
                 .stream()
-                .filter(track -> track.getChatId().equals(chat.getId()))
+                .map(record -> {
+                    Track track = new Track();
+                    track.setChatId(record.getChatId());
+                    track.setLinkId(record.getLinkId());
+                    return track;
+                })
                 .toList();
     }
 
     @Override
     @Transactional
     public List<Track> findAllTracksWithLink(@NotNull Link link) {
-        return findAll()
+        return dsl.selectFrom(Tracking.TRACKING)
+                .where(Tracking.TRACKING.LINK_ID.eq(link.getId()))
                 .stream()
-                .filter(track -> track.getLinkId().equals(link.getId()))
+                .map(record -> {
+                    Track track = new Track();
+                    track.setChatId(record.getChatId());
+                    track.setLinkId(record.getLinkId());
+                    return track;
+                })
                 .toList();
     }
 }

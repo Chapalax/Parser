@@ -73,11 +73,9 @@ public class JpaLinkRepository implements LinkRepository {
     @Override
     @Transactional
     public List<Link> findAllToUpdate() {
-        return findAll()
+        return linkEntityRepository.findAllByCheckedAtBefore(OffsetDateTime.now().minusMinutes(checkInterval))
                 .stream()
-                .filter(link -> link
-                        .getCheckedAt()
-                        .isBefore(OffsetDateTime.now().minusMinutes(checkInterval)))
+                .map(mapper::map)
                 .toList();
     }
 

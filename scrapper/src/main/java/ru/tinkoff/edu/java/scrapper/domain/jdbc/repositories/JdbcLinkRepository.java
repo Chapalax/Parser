@@ -11,7 +11,10 @@ import ru.tinkoff.edu.java.scrapper.domain.interfaces.LinkRepository;
 import ru.tinkoff.edu.java.scrapper.domain.jdbc.mappers.LinkDataRowMapper;
 import ru.tinkoff.edu.java.scrapper.domain.models.Link;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +34,7 @@ public class JdbcLinkRepository implements LinkRepository {
     private final String SQL_IS_EXISTS = "SELECT EXISTS(SELECT 1 FROM links WHERE path=:path)";
     private final String SQL_FIND_ONE_BY_URL = "SELECT 1 FROM links WHERE path=:path";
     private final String SQL_FIND_ONE_BY_ID = "SELECT 1 FROM links WHERE id=:id";
+    private final String SQL_FIND_UPDATES = "SELECT * FROM links WHERE checked_at < timestamp :timestamp";
     private final String SQL_UPDATE_LINK = "UPDATE links SET last_activity=:lastActivity, " +
             "action_count=:actionCount, checked_at=:checkedAt WHERE id=:id";
 
@@ -73,12 +77,9 @@ public class JdbcLinkRepository implements LinkRepository {
     @Override
     @Transactional
     public List<Link> findAllToUpdate() {
-        return findAll()
-                .stream()
-                .filter(link -> link
-                        .getCheckedAt()
-                        .isBefore(OffsetDateTime.now().minusMinutes(checkInterval)))
-                .toList();
+        return jdbcTemplate.query(SQL_FIND_UPDATES,
+                Map.of("timestamp", Timestamp.from(Instant.now().minus(checkInterval, ChronoUnit.MINUTES))),
+                rowMapper);
     }
 
     @Override
