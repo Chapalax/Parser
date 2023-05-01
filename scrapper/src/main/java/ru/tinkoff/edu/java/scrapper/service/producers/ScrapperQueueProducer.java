@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import ru.tinkoff.edu.java.scrapper.configuration.ApplicationConfig;
 import ru.tinkoff.edu.java.scrapper.service.interfaces.MessageSender;
-import ru.tinkoff.edu.java.scrapper.web.clients.dto.LinkUpdateResponse;
+import ru.tinkoff.edu.java.scrapper.dto.LinkUpdateResponse;
 
 @RequiredArgsConstructor
 public class ScrapperQueueProducer implements MessageSender {

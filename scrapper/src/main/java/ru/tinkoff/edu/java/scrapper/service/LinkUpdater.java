@@ -13,7 +13,7 @@ import ru.tinkoff.edu.java.scrapper.domain.models.Link;
 import ru.tinkoff.edu.java.scrapper.domain.models.Track;
 import ru.tinkoff.edu.java.scrapper.service.interfaces.MessageSender;
 import ru.tinkoff.edu.java.scrapper.web.clients.dto.GitHubResponse;
-import ru.tinkoff.edu.java.scrapper.web.clients.dto.LinkUpdateResponse;
+import ru.tinkoff.edu.java.scrapper.dto.LinkUpdateResponse;
 import ru.tinkoff.edu.java.scrapper.web.clients.dto.StackOverflowResponse;
 import ru.tinkoff.edu.java.scrapper.web.clients.interfaces.WebClientGitHub;
 import ru.tinkoff.edu.java.scrapper.web.clients.interfaces.WebClientStackOverflow;
