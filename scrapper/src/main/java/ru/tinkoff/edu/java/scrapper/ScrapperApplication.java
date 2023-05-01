@@ -13,7 +13,7 @@ import ru.tinkoff.edu.java.scrapper.web.clients.StackOverflowClient;
 public class ScrapperApplication {
     public static void main(String[] args) {
         var ctx = SpringApplication.run(ScrapperApplication.class, args);
-        WebClientConfig clientConfig= ctx.getBean(WebClientConfig.class);
+        var clientConfig = ctx.getBean(WebClientConfig.class);
         System.out.println(clientConfig);
         var gitHubClient = ctx.getBean(GitHubClient.class, clientConfig.github());
         System.out.println(gitHubClient.fetchGitHubRepository("Chapalax", "TrackingBot"));

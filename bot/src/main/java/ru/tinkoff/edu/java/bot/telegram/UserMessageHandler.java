@@ -3,6 +3,7 @@ package ru.tinkoff.edu.java.bot.telegram;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
+import org.jetbrains.annotations.NotNull;
 import ru.tinkoff.edu.java.bot.telegram.interfaces.Command;
 import ru.tinkoff.edu.java.bot.telegram.interfaces.UserMessageProcessor;
 import ru.tinkoff.edu.java.bot.web.clients.dto.AddLinkRequest;
@@ -60,16 +61,21 @@ public class UserMessageHandler implements UserMessageProcessor {
         return createSendMessage(update, WARNING);
     }
 
-    private SendMessage createSendMessage(Update update, String message) {
+    @Override
+    public void deleteChat(@NotNull Update update) {
+        scrapperClient.deleteChat(update.myChatMember().chat().id());
+    }
+
+    private SendMessage createSendMessage(@NotNull Update update, String message) {
         return new SendMessage(update.message().chat().id(), message);
     }
 
-    private boolean isReplyTrack(Update update) {
+    private boolean isReplyTrack(@NotNull Update update) {
         Message reply = update.message().replyToMessage();
         return reply != null && reply.text().equals(REPLY_TRACK);
     }
 
-    private boolean isReplyUntrack(Update update) {
+    private boolean isReplyUntrack(@NotNull Update update) {
         Message reply = update.message().replyToMessage();
         return reply != null && reply.text().equals(REPLY_UNTRACK);
     }

@@ -9,4 +9,6 @@ public interface UserMessageProcessor {
     List<? extends Command> commands();
 
     SendMessage process(Update update);
+
+    void deleteChat(Update update);
 }

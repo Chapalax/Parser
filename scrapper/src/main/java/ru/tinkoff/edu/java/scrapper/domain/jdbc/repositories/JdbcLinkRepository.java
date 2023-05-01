@@ -34,7 +34,7 @@ public class JdbcLinkRepository implements LinkRepository {
     private final String SQL_IS_EXISTS = "SELECT EXISTS(SELECT 1 FROM links WHERE path=:path)";
     private final String SQL_FIND_ONE_BY_URL = "SELECT 1 FROM links WHERE path=:path";
     private final String SQL_FIND_ONE_BY_ID = "SELECT 1 FROM links WHERE id=:id";
-    private final String SQL_FIND_UPDATES = "SELECT * FROM links WHERE checked_at < timestamp :timestamp";
+    private final String SQL_FIND_UPDATES = "SELECT * FROM links WHERE checked_at<:time";
     private final String SQL_UPDATE_LINK = "UPDATE links SET last_activity=:lastActivity, " +
             "action_count=:actionCount, checked_at=:checkedAt WHERE id=:id";
 
@@ -78,7 +78,7 @@ public class JdbcLinkRepository implements LinkRepository {
     @Transactional
     public List<Link> findAllToUpdate() {
         return jdbcTemplate.query(SQL_FIND_UPDATES,
-                Map.of("timestamp", Timestamp.from(Instant.now().minus(checkInterval, ChronoUnit.MINUTES))),
+                Map.of("time", Timestamp.from(Instant.now().minus(checkInterval, ChronoUnit.MINUTES))),
                 rowMapper);
     }
 

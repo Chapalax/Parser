@@ -44,7 +44,7 @@ public class LinkService implements ru.tinkoff.edu.java.scrapper.service.interfa
         if(record == null) throw new LinkNotFoundException("Link is not available now.");
 
         Link link = new Link();
-        link.setPath(url.getPath());
+        link.setPath(url.toString());
 
         if(record instanceof ParsedGitHub) {
             if(linkRepository.isExists(link)) {
@@ -88,7 +88,7 @@ public class LinkService implements ru.tinkoff.edu.java.scrapper.service.interfa
         var record = ParserHandler.parse(url);
         if(record == null) throw new LinkNotFoundException("Link not found.");
         Link link = new Link();
-        link.setPath(url.getPath());
+        link.setPath(url.toString());
 
         if(!linkRepository.isExists(link)) throw new LinkNotFoundException("Link not found.");
         link = linkRepository.findByUrl(link);
