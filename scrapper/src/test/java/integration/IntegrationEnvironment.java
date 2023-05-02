@@ -31,7 +31,6 @@ public abstract class IntegrationEnvironment {
             .getParent()
             .resolve("migrations");
 
-
     static {
         SQL_CONTAINER = new PostgreSQLContainer<>("postgres:15");
         SQL_CONTAINER.start();
