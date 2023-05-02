@@ -2,10 +2,7 @@ package ru.tinkoff.edu.java.scrapper.configuration;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
@@ -28,7 +25,10 @@ public class RabbitMQConfig {
 
     @Bean
     public Queue queue(@NotNull ApplicationConfig applicationConfig) {
-        return new Queue(applicationConfig.queueName());
+        return QueueBuilder.durable(applicationConfig.queueName())
+                .withArgument("x-dead-letter-exchange", "")
+                .withArgument("x-dead-letter-routing-key", applicationConfig.queueName() + ".dlq")
+                .build();
     }
 
     @Bean

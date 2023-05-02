@@ -1,11 +1,12 @@
 package ru.tinkoff.edu.java.scrapper.web.clients.dto;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.util.ArrayList;
 
-@Data
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class ApiErrorResponse extends Exception{
     String description;

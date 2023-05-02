@@ -1,14 +1,15 @@
 package ru.tinkoff.edu.java.bot.web.clients.dto;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
-@Data
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class ApiErrorResponse extends RuntimeException{
+public class ApiErrorResponse extends RuntimeException {
     String description;
     String code;
-    String exceptionsName;
+    String exceptionName;
     String exceptionMessage;
     String[] stacktrace;
 }

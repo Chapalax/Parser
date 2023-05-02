@@ -7,8 +7,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.scrapper.service.interfaces.LinkUpdater;
 
-@Component
 @Slf4j
+@Component
 @EnableScheduling
 @RequiredArgsConstructor
 public class LinkUpdaterScheduler {

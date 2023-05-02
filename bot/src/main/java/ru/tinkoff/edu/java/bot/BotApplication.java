@@ -11,8 +11,6 @@ import ru.tinkoff.edu.java.bot.configuration.ScrapperClientConfig;
 @EnableConfigurationProperties({ApplicationConfig.class, ScrapperClientConfig.class})
 public class BotApplication {
     public static void main(String[] args) {
-        var ctx = SpringApplication.run(BotApplication.class, args);
-        ScrapperClientConfig scrapperClientConfig = ctx.getBean(ScrapperClientConfig.class);
-        System.out.println(scrapperClientConfig);
+        SpringApplication.run(BotApplication.class, args);
     }
 }

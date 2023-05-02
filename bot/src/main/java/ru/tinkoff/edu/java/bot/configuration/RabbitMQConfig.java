@@ -2,15 +2,11 @@ package ru.tinkoff.edu.java.bot.configuration;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.support.converter.ClassMapper;
 import org.springframework.amqp.support.converter.DefaultClassMapper;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.tinkoff.edu.java.bot.dto.LinkUpdateRequest;
@@ -21,7 +17,6 @@ import java.util.Map;
 
 @Slf4j
 @Configuration
-@ConditionalOnProperty(prefix = "app", name = "use-queue", havingValue = "true")
 public class RabbitMQConfig {
 
     @Bean
@@ -32,15 +27,31 @@ public class RabbitMQConfig {
 
     @Bean
     public Queue queue(@NotNull ApplicationConfig applicationConfig) {
-        return new Queue(applicationConfig.queueName());
+        return QueueBuilder.durable(applicationConfig.queueName())
+                .withArgument("x-dead-letter-exchange", "")
+                .withArgument("x-dead-letter-routing-key", applicationConfig.queueName() + ".dlq")
+                .build();
     }
 
     @Bean
-    public Binding binding(@NotNull Queue queue, @NotNull DirectExchange exchange) {
+    public Queue deadLetterQueue(@NotNull ApplicationConfig applicationConfig) {
+        return QueueBuilder.durable(applicationConfig.queueName() + ".dlq").build();
+    }
+
+    @Bean
+    public Binding binding(@NotNull Queue queue, @NotNull DirectExchange directExchange) {
         return BindingBuilder
                 .bind(queue)
-                .to(exchange)
+                .to(directExchange)
                 .withQueueName();
+    }
+
+    @Bean
+    public Binding deadLetterBinding(@NotNull Queue deadLetterQueue, @NotNull DirectExchange directExchange) {
+        return BindingBuilder
+                .bind(deadLetterQueue)
+                .to(directExchange)
+                .with(deadLetterQueue.getName() + ".dlq");
     }
 
     @Bean

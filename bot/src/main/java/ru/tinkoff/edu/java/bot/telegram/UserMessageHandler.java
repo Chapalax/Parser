@@ -18,7 +18,6 @@ public class UserMessageHandler implements UserMessageProcessor {
     private final String WARNING = "This command does not exist.\nList of available commands: /help";
     private final String SUCCESSFUL_TRACK = "The link has been successfully added!";
     private final String SUCCESSFUL_UNTRACK = "The link has been successfully deleted!";
-    private final String ERROR_MESSAGE = "Something went wrong, try again.";
     private final String REPLY_TRACK = "Enter a link to the repository or question you are interested in:";
     private final String REPLY_UNTRACK = "Enter the link to the repository or the question " +
             "from which updates you want to unsubscribe:";
@@ -47,7 +46,7 @@ public class UserMessageHandler implements UserMessageProcessor {
                 scrapperClient.addLink(update.message().chat().id(), new AddLinkRequest(update.message().text()));
                 return createSendMessage(update, SUCCESSFUL_TRACK);
             } catch (ApiErrorResponse errorResponse) {
-                return createSendMessage(update, ERROR_MESSAGE);
+                return createSendMessage(update, errorResponse.getDescription());
             }
         }
         if (isReplyUntrack(update)) {
@@ -55,7 +54,7 @@ public class UserMessageHandler implements UserMessageProcessor {
                 scrapperClient.deleteLink(update.message().chat().id(), new RemoveLinkRequest(update.message().text()));
                 return createSendMessage(update, SUCCESSFUL_UNTRACK);
             } catch (ApiErrorResponse errorResponse) {
-                return createSendMessage(update, ERROR_MESSAGE);
+                return createSendMessage(update, errorResponse.getDescription());
             }
         }
         return createSendMessage(update, WARNING);
