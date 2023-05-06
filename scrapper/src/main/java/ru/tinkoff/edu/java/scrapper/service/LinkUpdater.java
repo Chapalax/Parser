@@ -1,6 +1,7 @@
 package ru.tinkoff.edu.java.scrapper.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.edu.java.linkparser.parsers.ParserHandler;
@@ -10,10 +11,10 @@ import ru.tinkoff.edu.java.scrapper.domain.interfaces.LinkRepository;
 import ru.tinkoff.edu.java.scrapper.domain.interfaces.TrackRepository;
 import ru.tinkoff.edu.java.scrapper.domain.models.Link;
 import ru.tinkoff.edu.java.scrapper.domain.models.Track;
+import ru.tinkoff.edu.java.scrapper.dto.LinkUpdateResponse;
+import ru.tinkoff.edu.java.scrapper.service.interfaces.MessageSender;
 import ru.tinkoff.edu.java.scrapper.web.clients.dto.GitHubResponse;
-import ru.tinkoff.edu.java.scrapper.web.clients.dto.LinkUpdateResponse;
 import ru.tinkoff.edu.java.scrapper.web.clients.dto.StackOverflowResponse;
-import ru.tinkoff.edu.java.scrapper.web.clients.interfaces.WebClientBot;
 import ru.tinkoff.edu.java.scrapper.web.clients.interfaces.WebClientGitHub;
 import ru.tinkoff.edu.java.scrapper.web.clients.interfaces.WebClientStackOverflow;
 
@@ -22,11 +23,12 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class LinkUpdater implements ru.tinkoff.edu.java.scrapper.service.interfaces.LinkUpdater {
 
-    private final WebClientBot botClient;
+    private final MessageSender sender;
     private final WebClientGitHub gitHubClient;
     private final WebClientStackOverflow stackOverflowClient;
     private final LinkRepository linkRepository;
@@ -36,7 +38,9 @@ public class LinkUpdater implements ru.tinkoff.edu.java.scrapper.service.interfa
     public void update() {
         List<Link> linksToUpdate = linkRepository.findAllToUpdate();
         for (Link link : linksToUpdate) {
+            log.info("Founded link to update: " + link.getPath());
             link.setCheckedAt(OffsetDateTime.now());
+            linkRepository.update(link);
             var record = ParserHandler.parse(URI.create(link.getPath()));
             if (record instanceof ParsedGitHub) {
                 GitHubResponse ghResponse = gitHubClient.fetchGitHubRepository(
@@ -46,8 +50,8 @@ public class LinkUpdater implements ru.tinkoff.edu.java.scrapper.service.interfa
                     var issuesDiff = ghResponse.issuesCount() - link.getActionCount();
                     link.setActionCount(ghResponse.issuesCount());
                     link.setLastActivity(ghResponse.updatedAt());
-                    linkRepository.update(link);
-                    botClient.sendUpdates(new LinkUpdateResponse(
+                    log.info("Link update successful, sending changes to bot...");
+                    sender.send(new LinkUpdateResponse(
                             link.getId(),
                             URI.create(link.getPath()),
                             "New issues: " + issuesDiff,
@@ -56,22 +60,21 @@ public class LinkUpdater implements ru.tinkoff.edu.java.scrapper.service.interfa
                     var issuesDiff = link.getActionCount() - ghResponse.issuesCount();
                     link.setActionCount(ghResponse.issuesCount());
                     link.setLastActivity(ghResponse.updatedAt());
-                    linkRepository.update(link);
-                    botClient.sendUpdates(new LinkUpdateResponse(
+                    log.info("Link update successful, sending changes to bot...");
+                    sender.send(new LinkUpdateResponse(
                             link.getId(),
                             URI.create(link.getPath()),
                             "Closed issues: " + issuesDiff,
                             getUsers(link)));
-                } else if (ghResponse.updatedAt().isAfter(link.getLastActivity())) {
+                } else if (link.getLastActivity().isBefore(ghResponse.updatedAt())) {
                     link.setLastActivity(ghResponse.updatedAt());
-                    linkRepository.update(link);
-                    botClient.sendUpdates(new LinkUpdateResponse(
+                    log.info("Link update successful, sending changes to bot...");
+                    sender.send(new LinkUpdateResponse(
                             link.getId(),
                             URI.create(link.getPath()),
                             "The repository has been updated!",
                             getUsers(link)));
                 }
-
             }
             if (record instanceof ParsedStackOverflow) {
                 StackOverflowResponse soResponse = stackOverflowClient.fetchStackOverflowQuestion(
@@ -80,8 +83,8 @@ public class LinkUpdater implements ru.tinkoff.edu.java.scrapper.service.interfa
                     var answersDiff = soResponse.answersCount() - link.getActionCount();
                     link.setActionCount(soResponse.answersCount());
                     link.setLastActivity(soResponse.lastActivity());
-                    linkRepository.update(link);
-                    botClient.sendUpdates(new LinkUpdateResponse(
+                    log.info("Link update successful, sending changes to bot...");
+                    sender.send(new LinkUpdateResponse(
                             link.getId(),
                             URI.create(link.getPath()),
                             "New answers: " + answersDiff,
@@ -90,22 +93,23 @@ public class LinkUpdater implements ru.tinkoff.edu.java.scrapper.service.interfa
                     var answersDiff = link.getActionCount() - soResponse.answersCount();
                     link.setActionCount(soResponse.answersCount());
                     link.setLastActivity(soResponse.lastActivity());
-                    linkRepository.update(link);
-                    botClient.sendUpdates(new LinkUpdateResponse(
+                    log.info("Link update successful, sending changes to bot...");
+                    sender.send(new LinkUpdateResponse(
                             link.getId(),
                             URI.create(link.getPath()),
                             "Deleted answers: " + answersDiff,
                             getUsers(link)));
-                } else if (soResponse.lastActivity().isAfter(link.getLastActivity())) {
+                } else if (link.getLastActivity().isBefore(soResponse.lastActivity())) {
                     link.setLastActivity(soResponse.lastActivity());
-                    linkRepository.update(link);
-                    botClient.sendUpdates(new LinkUpdateResponse(
+                    log.info("Link update successful, sending changes to bot...");
+                    sender.send(new LinkUpdateResponse(
                             link.getId(),
                             URI.create(link.getPath()),
                             "The question has been updated!",
                             getUsers(link)));
                 }
             }
+            linkRepository.update(link);
         }
     }
 

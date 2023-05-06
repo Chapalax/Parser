@@ -3,6 +3,7 @@ package ru.tinkoff.edu.java.scrapper.domain.jpa.repositories;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.domain.interfaces.TgChatRepository;
 import ru.tinkoff.edu.java.scrapper.domain.jpa.generated.JpaTgChatEntityRepository;
 import ru.tinkoff.edu.java.scrapper.domain.jpa.mappers.TgChatEntityMapper;
@@ -19,11 +20,13 @@ public class JpaTgChatRepository implements TgChatRepository {
     private final TgChatEntityMapper mapper = new TgChatEntityMapper();
 
     @Override
+    @Transactional
     public TgChat add(@NotNull TgChat object) {
         return mapper.map(tgChatEntityRepository.save(mapper.unmap(object)));
     }
 
     @Override
+    @Transactional
     public int remove(@NotNull TgChat object) {
         if (tgChatEntityRepository.existsById(object.getId())) {
             tgChatEntityRepository.delete(mapper.unmap(object));
@@ -33,6 +36,7 @@ public class JpaTgChatRepository implements TgChatRepository {
     }
 
     @Override
+    @Transactional
     public List<TgChat> findAll() {
         return tgChatEntityRepository.findAll()
                 .stream()
@@ -41,6 +45,7 @@ public class JpaTgChatRepository implements TgChatRepository {
     }
 
     @Override
+    @Transactional
     public Boolean isExists(@NotNull TgChat chat) {
         return tgChatEntityRepository.existsById(chat.getId());
     }

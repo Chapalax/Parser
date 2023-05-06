@@ -6,6 +6,7 @@ import com.pengrad.telegrambot.model.BotCommand;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SetMyCommands;
+import jakarta.annotation.PostConstruct;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +30,7 @@ public class TrackerBot implements Bot {
         bot = new TelegramBot(token);
     }
 
+    @PostConstruct
     @Override
     public void start() {
         bot.setUpdatesListener(this);
@@ -47,7 +49,8 @@ public class TrackerBot implements Bot {
     @Override
     public int process(@NotNull List<Update> list) {
         for (Update update : list) {
-            bot.execute(userMessageProcessor.process(update));
+            if (update.myChatMember() != null) userMessageProcessor.deleteChat(update);
+            else bot.execute(userMessageProcessor.process(update));
         }
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }

@@ -9,12 +9,12 @@ import ru.tinkoff.edu.java.linkparser.records.ParsedStackOverflow;
 import ru.tinkoff.edu.java.scrapper.domain.interfaces.LinkRepository;
 import ru.tinkoff.edu.java.scrapper.domain.interfaces.TgChatRepository;
 import ru.tinkoff.edu.java.scrapper.domain.interfaces.TrackRepository;
-import ru.tinkoff.edu.java.scrapper.exceptions.AddedLinkExistsException;
-import ru.tinkoff.edu.java.scrapper.exceptions.ChatNotFoundException;
-import ru.tinkoff.edu.java.scrapper.exceptions.LinkNotFoundException;
 import ru.tinkoff.edu.java.scrapper.domain.models.Link;
 import ru.tinkoff.edu.java.scrapper.domain.models.TgChat;
 import ru.tinkoff.edu.java.scrapper.domain.models.Track;
+import ru.tinkoff.edu.java.scrapper.exceptions.AddedLinkExistsException;
+import ru.tinkoff.edu.java.scrapper.exceptions.ChatNotFoundException;
+import ru.tinkoff.edu.java.scrapper.exceptions.LinkNotFoundException;
 import ru.tinkoff.edu.java.scrapper.web.clients.dto.GitHubResponse;
 import ru.tinkoff.edu.java.scrapper.web.clients.dto.StackOverflowResponse;
 import ru.tinkoff.edu.java.scrapper.web.clients.interfaces.WebClientGitHub;
@@ -41,10 +41,10 @@ public class LinkService implements ru.tinkoff.edu.java.scrapper.service.interfa
 
         if(!tgChatRepository.isExists(chat)) throw new ChatNotFoundException("Chat not found.");
         var record = ParserHandler.parse(url);
-        if(record == null) throw new LinkNotFoundException("Link is not available now.");
+        if(record == null) throw new LinkNotFoundException("This link type is not supported.");
 
         Link link = new Link();
-        link.setPath(url.getPath());
+        link.setPath(url.toString());
 
         if(record instanceof ParsedGitHub) {
             if(linkRepository.isExists(link)) {
@@ -88,14 +88,14 @@ public class LinkService implements ru.tinkoff.edu.java.scrapper.service.interfa
         var record = ParserHandler.parse(url);
         if(record == null) throw new LinkNotFoundException("Link not found.");
         Link link = new Link();
-        link.setPath(url.getPath());
+        link.setPath(url.toString());
 
         if(!linkRepository.isExists(link)) throw new LinkNotFoundException("Link not found.");
         link = linkRepository.findByUrl(link);
         Track track = new Track();
         track.setChatId(tgChatId);
         track.setLinkId(link.getId());
-        if(trackRepository.remove(track) == 0) throw new LinkNotFoundException("Link not found.");
+        if(trackRepository.remove(track) == 0) throw new LinkNotFoundException("You are not following this link.");
         if(!trackRepository.isTrackedByAnyone(link)) linkRepository.remove(link);
         return link;
     }

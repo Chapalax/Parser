@@ -2,6 +2,7 @@ package ru.tinkoff.edu.java.scrapper.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,14 +34,14 @@ public class ScrapperLinksController {
 
     @PostMapping
     public ResponseEntity<LinkResponse> postAddLink(@RequestHeader("Tg-Chat-Id") long tgChatId,
-                                                    @RequestBody @Valid AddLinkRequest addLinkRequest) {
+                                                    @RequestBody @Valid @NotNull AddLinkRequest addLinkRequest) {
         Link addedLink = linkService.add(tgChatId, URI.create(addLinkRequest.link()));
         return new ResponseEntity<>(new LinkResponse(addedLink.getId(), addedLink.getPath()), HttpStatus.OK);
     }
 
     @DeleteMapping
     public ResponseEntity<LinkResponse> deleteLink(@RequestHeader("Tg-Chat-Id") long tgChatId,
-                                                   @RequestBody @Valid RemoveLinkRequest removeLinkRequest) {
+                                                   @RequestBody @Valid @NotNull RemoveLinkRequest removeLinkRequest) {
         Link link = linkService.remove(tgChatId, URI.create(removeLinkRequest.link()));
         return new ResponseEntity<>(new LinkResponse(link.getId(), link.getPath()), HttpStatus.OK);
     }
