@@ -1,19 +1,18 @@
 package ru.tinkoff.edu.java.scrapper.domain.jdbc.repositories;
 
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.domain.interfaces.TgChatRepository;
-import ru.tinkoff.edu.java.scrapper.models.TgChat;
+import ru.tinkoff.edu.java.scrapper.domain.models.TgChat;
 
 import java.util.List;
 import java.util.Map;
 
-@Repository
 @RequiredArgsConstructor
 public class JdbcTgChatRepository implements TgChatRepository {
 
@@ -27,13 +26,13 @@ public class JdbcTgChatRepository implements TgChatRepository {
 
     @Override
     @Transactional
-    public TgChat add(TgChat object) {
+    public TgChat add(@NotNull TgChat object) {
         return jdbcTemplate.queryForObject(SQL_ADD, new BeanPropertySqlParameterSource(object), rowMapper);
     }
 
     @Override
     @Transactional
-    public int remove(TgChat object) {
+    public int remove(@NotNull TgChat object) {
         return jdbcTemplate.update(SQL_REMOVE, Map.of("id", object.getId()));
     }
 
@@ -45,7 +44,7 @@ public class JdbcTgChatRepository implements TgChatRepository {
 
     @Override
     @Transactional
-    public Boolean isExists(TgChat chat) {
+    public Boolean isExists(@NotNull TgChat chat) {
         return jdbcTemplate.queryForObject(SQL_IS_EXISTS, Map.of("id", chat.getId()), Boolean.class);
     }
 }

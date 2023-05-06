@@ -1,21 +1,23 @@
 package ru.tinkoff.edu.java.scrapper.domain.jdbc.repositories;
 
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.domain.interfaces.LinkRepository;
 import ru.tinkoff.edu.java.scrapper.domain.jdbc.mappers.LinkDataRowMapper;
-import ru.tinkoff.edu.java.scrapper.models.Link;
+import ru.tinkoff.edu.java.scrapper.domain.models.Link;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 
-@Repository
 @RequiredArgsConstructor
 public class JdbcLinkRepository implements LinkRepository {
 
@@ -32,19 +34,19 @@ public class JdbcLinkRepository implements LinkRepository {
     private final String SQL_IS_EXISTS = "SELECT EXISTS(SELECT 1 FROM links WHERE path=:path)";
     private final String SQL_FIND_ONE_BY_URL = "SELECT 1 FROM links WHERE path=:path";
     private final String SQL_FIND_ONE_BY_ID = "SELECT 1 FROM links WHERE id=:id";
+    private final String SQL_FIND_UPDATES = "SELECT * FROM links WHERE checked_at < timestamp :timestamp";
     private final String SQL_UPDATE_LINK = "UPDATE links SET last_activity=:lastActivity, " +
             "action_count=:actionCount, checked_at=:checkedAt WHERE id=:id";
 
     @Override
     @Transactional
-    public Link add(Link object) {
-        if (object.getActionCount() == null) object.setActionCount(0);
+    public Link add(@NotNull Link object) {
         return jdbcTemplate.queryForObject(SQL_ADD, new BeanPropertySqlParameterSource(object), rowMapper);
     }
 
     @Override
     @Transactional
-    public int remove(Link object) {
+    public int remove(@NotNull Link object) {
         return jdbcTemplate.update(SQL_REMOVE, Map.of("path", object.getPath()));
     }
 
@@ -56,35 +58,33 @@ public class JdbcLinkRepository implements LinkRepository {
 
     @Override
     @Transactional
-    public Boolean isExists(Link link) {
+    public Boolean isExists(@NotNull Link link) {
         return jdbcTemplate.queryForObject(SQL_IS_EXISTS, Map.of("path", link.getPath()), Boolean.class);
     }
 
     @Override
     @Transactional
-    public Link findByUrl(Link link) {
+    public Link findByUrl(@NotNull Link link) {
         return jdbcTemplate.queryForObject(SQL_FIND_ONE_BY_URL, new BeanPropertySqlParameterSource(link), rowMapper);
     }
 
     @Override
     @Transactional
-    public Link findById(Link link) {
+    public Link findById(@NotNull Link link) {
         return jdbcTemplate.queryForObject(SQL_FIND_ONE_BY_ID, new BeanPropertySqlParameterSource(link), rowMapper);
     }
 
     @Override
     @Transactional
     public List<Link> findAllToUpdate() {
-        return findAll()
-                .stream()
-                .filter(link -> link
-                        .getCheckedAt()
-                        .isBefore(OffsetDateTime.now().minusMinutes(checkInterval)))
-                .toList();
+        return jdbcTemplate.query(SQL_FIND_UPDATES,
+                Map.of("timestamp", Timestamp.from(Instant.now().minus(checkInterval, ChronoUnit.MINUTES))),
+                rowMapper);
     }
 
     @Override
-    public void update(Link link) {
+    @Transactional
+    public void update(@NotNull Link link) {
         jdbcTemplate.update(SQL_UPDATE_LINK,
                 Map.of("lastActivity", link.getLastActivity(),
                         "actionCount", link.getActionCount(),

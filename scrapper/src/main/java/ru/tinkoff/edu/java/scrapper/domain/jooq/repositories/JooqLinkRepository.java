@@ -1,22 +1,22 @@
 package ru.tinkoff.edu.java.scrapper.domain.jooq.repositories;
 
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
 import org.jooq.exception.DataAccessException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.domain.interfaces.LinkRepository;
 import ru.tinkoff.edu.java.scrapper.domain.jooq.generated.tables.Links;
 import ru.tinkoff.edu.java.scrapper.domain.jooq.generated.tables.records.LinksRecord;
 import ru.tinkoff.edu.java.scrapper.domain.jooq.mappers.LinkRecordMapper;
 import ru.tinkoff.edu.java.scrapper.domain.jooq.mappers.LinkRecordUnmapper;
-import ru.tinkoff.edu.java.scrapper.models.Link;
+import ru.tinkoff.edu.java.scrapper.domain.models.Link;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-@Repository
 @RequiredArgsConstructor
 public class JooqLinkRepository implements LinkRepository {
 
@@ -30,8 +30,8 @@ public class JooqLinkRepository implements LinkRepository {
     private final LinkRecordUnmapper recordUnmapper;
 
     @Override
-    public Link add(Link object) {
-        if (object.getActionCount() == null) object.setActionCount(0);
+    @Transactional
+    public Link add(@NotNull Link object) {
         return dsl.insertInto(Links.LINKS)
                 .set(recordUnmapper.unmap(object))
                 .returning()
@@ -41,13 +41,15 @@ public class JooqLinkRepository implements LinkRepository {
     }
 
     @Override
-    public int remove(Link object) {
+    @Transactional
+    public int remove(@NotNull Link object) {
         return dsl.deleteFrom(Links.LINKS)
                 .where(Links.LINKS.PATH.eq(object.getPath()))
                 .execute();
     }
 
     @Override
+    @Transactional
     public List<Link> findAll() {
         return dsl.selectFrom(Links.LINKS)
                 .stream()
@@ -56,7 +58,8 @@ public class JooqLinkRepository implements LinkRepository {
     }
 
     @Override
-    public Boolean isExists(Link link) {
+    @Transactional
+    public Boolean isExists(@NotNull Link link) {
         return dsl.fetchExists(
                 dsl.selectFrom(Links.LINKS)
                         .where(Links.LINKS.PATH.eq(link.getPath()))
@@ -64,7 +67,8 @@ public class JooqLinkRepository implements LinkRepository {
     }
 
     @Override
-    public Link findByUrl(Link link) {
+    @Transactional
+    public Link findByUrl(@NotNull Link link) {
         return Objects.requireNonNull(dsl.selectOne()
                         .from(Links.LINKS)
                         .where(Links.LINKS.PATH.eq(link.getPath()))
@@ -73,7 +77,8 @@ public class JooqLinkRepository implements LinkRepository {
     }
 
     @Override
-    public Link findById(Link link) {
+    @Transactional
+    public Link findById(@NotNull Link link) {
         return Objects.requireNonNull(dsl.selectOne()
                         .from(Links.LINKS)
                         .where(Links.LINKS.ID.eq(link.getId()))
@@ -82,17 +87,18 @@ public class JooqLinkRepository implements LinkRepository {
     }
 
     @Override
+    @Transactional
     public List<Link> findAllToUpdate() {
-        return findAll()
+        return dsl.selectFrom(Links.LINKS)
+                .where(Links.LINKS.CHECKED_AT.le(LocalDateTime.now().minusMinutes(checkInterval)))
                 .stream()
-                .filter(link -> link
-                        .getCheckedAt()
-                        .isBefore(OffsetDateTime.now().minusMinutes(checkInterval)))
+                .map(recordMapper::map)
                 .toList();
     }
 
     @Override
-    public void update(Link link) {
+    @Transactional
+    public void update(@NotNull Link link) {
         dsl.update(Links.LINKS)
                 .set(recordUnmapper.unmap(link))
                 .where(Links.LINKS.ID.eq(link.getId()))

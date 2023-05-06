@@ -12,9 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.ScrapperApplication;
 import ru.tinkoff.edu.java.scrapper.domain.jdbc.mappers.LinkDataRowMapper;
 import ru.tinkoff.edu.java.scrapper.domain.jdbc.mappers.TrackDataRowMapper;
-import ru.tinkoff.edu.java.scrapper.domain.jdbc.repositories.JdbcLinkRepository;
-import ru.tinkoff.edu.java.scrapper.domain.jdbc.repositories.JdbcTgChatRepository;
-import ru.tinkoff.edu.java.scrapper.domain.jdbc.repositories.JdbcTrackRepository;
+import ru.tinkoff.edu.java.scrapper.domain.jooq.repositories.JooqLinkRepository;
+import ru.tinkoff.edu.java.scrapper.domain.jooq.repositories.JooqTgChatRepository;
+import ru.tinkoff.edu.java.scrapper.domain.jooq.repositories.JooqTrackRepository;
 import ru.tinkoff.edu.java.scrapper.domain.models.Link;
 import ru.tinkoff.edu.java.scrapper.domain.models.TgChat;
 import ru.tinkoff.edu.java.scrapper.domain.models.Track;
@@ -26,15 +26,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
 @SpringBootTest(classes = ScrapperApplication.class)
-public class JdbcRepositoriesTest extends IntegrationEnvironment{
+public class JooqRepositoriesTest extends IntegrationEnvironment{
     @Autowired
-    private JdbcLinkRepository linkRepository;
+    private JooqLinkRepository linkRepository;
 
     @Autowired
-    private JdbcTgChatRepository tgChatRepository;
+    private JooqTgChatRepository tgChatRepository;
 
     @Autowired
-    private JdbcTrackRepository trackRepository;
+    private JooqTrackRepository trackRepository;
 
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;

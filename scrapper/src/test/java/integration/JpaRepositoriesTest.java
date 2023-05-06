@@ -12,9 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.ScrapperApplication;
 import ru.tinkoff.edu.java.scrapper.domain.jdbc.mappers.LinkDataRowMapper;
 import ru.tinkoff.edu.java.scrapper.domain.jdbc.mappers.TrackDataRowMapper;
-import ru.tinkoff.edu.java.scrapper.domain.jdbc.repositories.JdbcLinkRepository;
-import ru.tinkoff.edu.java.scrapper.domain.jdbc.repositories.JdbcTgChatRepository;
-import ru.tinkoff.edu.java.scrapper.domain.jdbc.repositories.JdbcTrackRepository;
+import ru.tinkoff.edu.java.scrapper.domain.jpa.repositories.JpaLinkRepository;
+import ru.tinkoff.edu.java.scrapper.domain.jpa.repositories.JpaTgChatRepository;
+import ru.tinkoff.edu.java.scrapper.domain.jpa.repositories.JpaTrackRepository;
 import ru.tinkoff.edu.java.scrapper.domain.models.Link;
 import ru.tinkoff.edu.java.scrapper.domain.models.TgChat;
 import ru.tinkoff.edu.java.scrapper.domain.models.Track;
@@ -26,15 +26,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
 @SpringBootTest(classes = ScrapperApplication.class)
-public class JdbcRepositoriesTest extends IntegrationEnvironment{
+public class JpaRepositoriesTest extends IntegrationEnvironment{
     @Autowired
-    private JdbcLinkRepository linkRepository;
+    private JpaLinkRepository linkRepository;
 
     @Autowired
-    private JdbcTgChatRepository tgChatRepository;
+    private JpaTgChatRepository tgChatRepository;
 
     @Autowired
-    private JdbcTrackRepository trackRepository;
+    private JpaTrackRepository trackRepository;
 
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
@@ -69,6 +69,7 @@ public class JdbcRepositoriesTest extends IntegrationEnvironment{
         TgChat tgChat = createNewTgChat(7777777L);
 
         assertThat(tgChatRepository.add(tgChat).getId()).isEqualTo(7777777L);
+        tgChatRepository.flush();
         assertThat(jdbcTemplate.query("SELECT * FROM chats", tgChatRowMapper)
                 .get(0)
                 .getId())
@@ -82,6 +83,7 @@ public class JdbcRepositoriesTest extends IntegrationEnvironment{
         Link link = createNewLink(1);
 
         assertThat(linkRepository.add(link).getActionCount()).isEqualTo(0);
+        linkRepository.flush();
         assertThat(jdbcTemplate.query("SELECT * FROM links", linkRowMapper)
                 .get(0)
                 .getPath())
@@ -98,6 +100,7 @@ public class JdbcRepositoriesTest extends IntegrationEnvironment{
         track.setLinkId(linkRepository.findAll().get(0).getId());
 
         assertThat(trackRepository.add(track).getChatId()).isEqualTo(11L);
+        trackRepository.flush();
         assertThat(jdbcTemplate.query("SELECT * FROM tracking", trackRowMapper)
                 .get(0)
                 .getLinkId())
@@ -112,6 +115,7 @@ public class JdbcRepositoriesTest extends IntegrationEnvironment{
         tgChatRepository.add(tgChat);
 
         assertThat(tgChatRepository.remove(tgChat)).isEqualTo(1);
+        tgChatRepository.flush();
 
         Throwable throwable = catchThrowable(
                 () -> jdbcTemplate.query("SELECT * FROM chats", tgChatRowMapper).get(0)
@@ -128,6 +132,7 @@ public class JdbcRepositoriesTest extends IntegrationEnvironment{
         List<Link> links = linkRepository.findAll();
 
         assertThat(linkRepository.remove(links.get(0))).isEqualTo(1);
+        linkRepository.flush();
 
         Throwable throwable = catchThrowable(
                 () -> jdbcTemplate.query("SELECT * FROM links", linkRowMapper).get(0)
@@ -147,6 +152,7 @@ public class JdbcRepositoriesTest extends IntegrationEnvironment{
         trackRepository.add(track);
 
         assertThat(trackRepository.remove(track)).isEqualTo(1);
+        trackRepository.flush();
 
         Throwable throwable = catchThrowable(
                 () -> jdbcTemplate.query("SELECT * FROM tracking", trackRowMapper).get(0)

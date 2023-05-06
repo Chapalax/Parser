@@ -1,15 +1,15 @@
 package ru.tinkoff.edu.java.scrapper.controllers;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.tinkoff.edu.java.scrapper.domain.models.Link;
 import ru.tinkoff.edu.java.scrapper.dto.AddLinkRequest;
 import ru.tinkoff.edu.java.scrapper.dto.LinkResponse;
 import ru.tinkoff.edu.java.scrapper.dto.ListLinksResponse;
 import ru.tinkoff.edu.java.scrapper.dto.RemoveLinkRequest;
-import ru.tinkoff.edu.java.scrapper.models.Link;
 import ru.tinkoff.edu.java.scrapper.service.interfaces.LinkService;
 
 import java.net.URI;
@@ -18,14 +18,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/links")
+@RequiredArgsConstructor
 public class ScrapperLinksController {
 
     private final LinkService linkService;
-
-    @Autowired
-    public ScrapperLinksController(LinkService linkService) {
-        this.linkService = linkService;
-    }
 
     @GetMapping
     public ResponseEntity<ListLinksResponse> getAllLinks(@RequestHeader("Tg-Chat-Id") long tgChatId) {

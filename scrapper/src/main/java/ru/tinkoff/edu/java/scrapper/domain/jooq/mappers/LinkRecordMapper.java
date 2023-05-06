@@ -1,16 +1,15 @@
 package ru.tinkoff.edu.java.scrapper.domain.jooq.mappers;
 
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.RecordMapper;
-import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.scrapper.domain.jooq.generated.tables.records.LinksRecord;
-import ru.tinkoff.edu.java.scrapper.models.Link;
+import ru.tinkoff.edu.java.scrapper.domain.models.Link;
 
-@Component
 public class LinkRecordMapper implements RecordMapper<LinksRecord, Link> {
     @Override
-    public @Nullable Link map(LinksRecord linksRecord) {
+    public @Nullable Link map(@NotNull LinksRecord linksRecord) {
         Link link = linksRecord.into(Link.class);
         link.setLastActivity(link.getLastActivity().toZonedDateTime().toOffsetDateTime());
         link.setCheckedAt(link.getCheckedAt().toZonedDateTime().toOffsetDateTime());

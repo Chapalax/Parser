@@ -1,7 +1,7 @@
 package ru.tinkoff.edu.java.scrapper.service.interfaces;
 
 import org.jetbrains.annotations.NotNull;
-import ru.tinkoff.edu.java.scrapper.models.Link;
+import ru.tinkoff.edu.java.scrapper.domain.models.Link;
 
 import java.net.URI;
 import java.util.List;

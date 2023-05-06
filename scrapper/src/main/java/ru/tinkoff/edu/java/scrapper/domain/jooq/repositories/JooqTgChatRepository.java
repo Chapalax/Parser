@@ -1,23 +1,24 @@
 package ru.tinkoff.edu.java.scrapper.domain.jooq.repositories;
 
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
 import org.jooq.exception.DataAccessException;
-import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.domain.interfaces.TgChatRepository;
 import ru.tinkoff.edu.java.scrapper.domain.jooq.generated.tables.Chats;
-import ru.tinkoff.edu.java.scrapper.models.TgChat;
+import ru.tinkoff.edu.java.scrapper.domain.models.TgChat;
 
 import java.util.List;
 
-@Repository
 @RequiredArgsConstructor
 public class JooqTgChatRepository implements TgChatRepository {
 
     private final DSLContext dsl;
 
     @Override
-    public TgChat add(TgChat object) {
+    @Transactional
+    public TgChat add(@NotNull TgChat object) {
         return dsl.insertInto(Chats.CHATS)
                 .set(dsl.newRecord(Chats.CHATS, object))
                 .returning()
@@ -27,13 +28,15 @@ public class JooqTgChatRepository implements TgChatRepository {
     }
 
     @Override
-    public int remove(TgChat object) {
+    @Transactional
+    public int remove(@NotNull TgChat object) {
         return dsl.deleteFrom(Chats.CHATS)
                 .where(Chats.CHATS.ID.eq(object.getId()))
                 .execute();
     }
 
     @Override
+    @Transactional
     public List<TgChat> findAll() {
         return dsl.selectFrom(Chats.CHATS)
                 .stream()
@@ -46,7 +49,8 @@ public class JooqTgChatRepository implements TgChatRepository {
     }
 
     @Override
-    public Boolean isExists(TgChat chat) {
+    @Transactional
+    public Boolean isExists(@NotNull TgChat chat) {
         return dsl.fetchExists(
                 dsl.selectOne()
                         .from(Chats.CHATS)

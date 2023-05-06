@@ -2,8 +2,8 @@ package ru.tinkoff.edu.java.bot.telegram.commands;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.bot.telegram.interfaces.Command;
 import ru.tinkoff.edu.java.bot.web.clients.dto.ApiErrorResponse;
@@ -11,6 +11,7 @@ import ru.tinkoff.edu.java.bot.web.clients.interfaces.WebClientScrapper;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class ListCommand implements Command {
     private final String COMMAND = "list";
     private final String DESCRIPTION = "Show list of tracked links";
@@ -20,11 +21,6 @@ public class ListCommand implements Command {
             "To start tracking updates, use the command /track";
 
     private final WebClientScrapper scrapperClient;
-
-    @Autowired
-    public ListCommand(WebClientScrapper scrapperClient) {
-        this.scrapperClient = scrapperClient;
-    }
 
     @Override
     public String command() {
