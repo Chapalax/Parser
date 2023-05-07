@@ -60,10 +60,10 @@ jobs:
         id: lw-step
         uses: ASzc/change-string-case-action@v5
         with:
-          string: ${{ github.actor }}/${{ github.repository }}
+          string: ${{ github.repository }}
 
       - name: Build Docker image
-        run: docker build -f ${{ env.MODULE_NAME }}.Dockerfile -t \
+        run: docker build -f ${{ env.MODULE_NAME }}.Dockerfile -t |
           ${{ env.REGISTRY }}/${{ steps.lw-step.outputs.lowercase }}/${{ env.MODULE_NAME }}:${{ env.IMAGE_VERSION }} .
 
       - name: Log in to the Container registry
