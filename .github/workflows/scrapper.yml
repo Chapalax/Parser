@@ -42,12 +42,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
+          
+      - name: Docker compose up
+        run: docker compose up -d
 
       - name: Build Scrapper Jooq
         run: mvn package -pl scrapper-jooq -am
-
-      - name: Docker compose up
-        run: docker compose up -d
 
       - name: Run Scrapper Jooq JAR
         run: java -jar scrapper-jooq/target/scrapper-jooq-1.0-SNAPSHOT.jar
