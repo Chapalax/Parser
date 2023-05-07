@@ -49,7 +49,8 @@ jobs:
           string: ${{ github.repository }}
 
       - name: Build Docker image
-        run: docker build --build-arg bot_token=${{ secrets.BOT_TOKEN }} -f ${{ env.MODULE_NAME }}.Dockerfile -t |
+        run: |
+          docker build --build-arg bot_token=${{ secrets.BOT_TOKEN }} -f ${{ env.MODULE_NAME }}.Dockerfile -t 
           ${{ env.REGISTRY }}/${{ steps.lw-step.outputs.lowercase }}/${{ env.MODULE_NAME }}:${{ env.IMAGE_VERSION }} .
 
       - name: Log in to the Container registry
@@ -60,5 +61,6 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push bot image to the Container registry
-        run: docker push \
+        run: |
+          docker push 
           ${{ env.REGISTRY }}/${{ steps.lw-step.outputs.lowercase }}/${{ env.MODULE_NAME }}:${{ env.IMAGE_VERSION }}
