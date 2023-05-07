@@ -6,10 +6,11 @@ import ru.tinkoff.edu.java.scrapper.domain.interfaces.TgChatRepository;
 import ru.tinkoff.edu.java.scrapper.exceptions.ChatNotFoundException;
 import ru.tinkoff.edu.java.scrapper.exceptions.RegisteredUserExistsException;
 import ru.tinkoff.edu.java.scrapper.domain.models.TgChat;
+import ru.tinkoff.edu.java.scrapper.service.interfaces.TgChatService;
 
 @Service
 @RequiredArgsConstructor
-public class TgChatService implements ru.tinkoff.edu.java.scrapper.service.interfaces.TgChatService {
+public class MainTgChatService implements TgChatService {
 
     private final TgChatRepository tgChatRepository;
 

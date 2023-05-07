@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.File;
@@ -22,7 +21,6 @@ import java.sql.SQLException;
 
 @Testcontainers
 public abstract class IntegrationEnvironment {
-    @Container
     static final PostgreSQLContainer<?> SQL_CONTAINER;
     private static final Path MIGRATIONS_PATH = new File(".")
             .toPath()

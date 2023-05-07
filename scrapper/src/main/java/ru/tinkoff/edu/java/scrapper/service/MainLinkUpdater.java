@@ -12,6 +12,7 @@ import ru.tinkoff.edu.java.scrapper.domain.interfaces.TrackRepository;
 import ru.tinkoff.edu.java.scrapper.domain.models.Link;
 import ru.tinkoff.edu.java.scrapper.domain.models.Track;
 import ru.tinkoff.edu.java.scrapper.dto.LinkUpdateResponse;
+import ru.tinkoff.edu.java.scrapper.service.interfaces.LinkUpdater;
 import ru.tinkoff.edu.java.scrapper.service.interfaces.MessageSender;
 import ru.tinkoff.edu.java.scrapper.web.clients.dto.GitHubResponse;
 import ru.tinkoff.edu.java.scrapper.web.clients.dto.StackOverflowResponse;
@@ -26,7 +27,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LinkUpdater implements ru.tinkoff.edu.java.scrapper.service.interfaces.LinkUpdater {
+public class MainLinkUpdater implements LinkUpdater {
 
     private final MessageSender sender;
     private final WebClientGitHub gitHubClient;

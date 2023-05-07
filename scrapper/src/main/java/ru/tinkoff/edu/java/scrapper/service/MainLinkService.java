@@ -15,6 +15,7 @@ import ru.tinkoff.edu.java.scrapper.domain.models.Track;
 import ru.tinkoff.edu.java.scrapper.exceptions.AddedLinkExistsException;
 import ru.tinkoff.edu.java.scrapper.exceptions.ChatNotFoundException;
 import ru.tinkoff.edu.java.scrapper.exceptions.LinkNotFoundException;
+import ru.tinkoff.edu.java.scrapper.service.interfaces.LinkService;
 import ru.tinkoff.edu.java.scrapper.web.clients.dto.GitHubResponse;
 import ru.tinkoff.edu.java.scrapper.web.clients.dto.StackOverflowResponse;
 import ru.tinkoff.edu.java.scrapper.web.clients.interfaces.WebClientGitHub;
@@ -26,7 +27,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class LinkService implements ru.tinkoff.edu.java.scrapper.service.interfaces.LinkService {
+public class MainLinkService implements LinkService {
 
     private final LinkRepository linkRepository;
     private final TgChatRepository tgChatRepository;
