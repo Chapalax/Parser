@@ -1,16 +1,51 @@
 package ru.tinkoff.edu;
 
+import liquibase.Contexts;
+import liquibase.LabelExpression;
+import liquibase.Liquibase;
+import liquibase.database.core.PostgresDatabase;
+import liquibase.database.jvm.JdbcConnection;
+import liquibase.exception.LiquibaseException;
+import liquibase.resource.DirectoryResourceAccessor;
 import org.jooq.codegen.GenerationTool;
 import org.jooq.meta.jaxb.*;
+import org.testcontainers.containers.PostgreSQLContainer;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.nio.file.Path;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class JooqCodegen {
+    static final PostgreSQLContainer<?> SQL_JOOQ_CONTAINER;
+    private static final Path MIGRATIONS_PATH = new File(".")
+            .toPath()
+            .toAbsolutePath()
+            .getParent()
+            .resolve("migrations");
+
+    static {
+        SQL_JOOQ_CONTAINER = new PostgreSQLContainer<>("postgres:15");
+        SQL_JOOQ_CONTAINER.start();
+
+        try (Connection connection = SQL_JOOQ_CONTAINER.createConnection("");
+             PostgresDatabase database = new PostgresDatabase()) {
+            database.setConnection(new JdbcConnection(connection));
+            Liquibase liquibase = new liquibase.Liquibase("master.xml",
+                    new DirectoryResourceAccessor(MIGRATIONS_PATH.normalize()), database);
+            liquibase.update(new Contexts(), new LabelExpression());
+        } catch (SQLException | FileNotFoundException | LiquibaseException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public static void main(String[] args) throws Exception {
 
         Jdbc jdbc = new Jdbc()
-                .withDriver("org.postgresql.Driver")
-                .withUrl("jdbc:postgresql://localhost:5432/scrapper")
-                .withUser("user")
-                .withPassword("secret");
+                .withDriver(SQL_JOOQ_CONTAINER.getDriverClassName())
+                .withUrl(SQL_JOOQ_CONTAINER.getJdbcUrl())
+                .withUser(SQL_JOOQ_CONTAINER.getUsername())
+                .withPassword(SQL_JOOQ_CONTAINER.getPassword());
 
         Database database = new Database()
                 .withName("org.jooq.meta.postgres.PostgresDatabase")
