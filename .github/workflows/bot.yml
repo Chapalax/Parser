@@ -35,12 +35,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Build Scrapper Jooq
-        run: mvn package -pl scrapper-jooq -am
-
-      - name: Run Scrapper Jooq JAR
-        run: java -jar scrapper-jooq-1.0-SNAPSHOT.jar
-
       - name: Build project with Maven
         run: mvn package -pl bot -am
 
