@@ -63,4 +63,4 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push scrapper image to the Container registry
-        run: docker push ghcr.io/${{github.actor}}/scrapper:latest
+        run: docker push ghcr.io/chapalax/scrapper:latest

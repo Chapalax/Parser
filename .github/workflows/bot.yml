@@ -49,4 +49,4 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push bot image to the Container registry
-        run: docker push ghcr.io/${{github.actor}}/bot:latest
+        run: docker push ghcr.io/chapalax/bot:latest
