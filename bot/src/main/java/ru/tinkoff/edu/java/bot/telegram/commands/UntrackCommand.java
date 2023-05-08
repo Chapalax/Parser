@@ -11,8 +11,8 @@ import ru.tinkoff.edu.java.bot.telegram.interfaces.Command;
 public class UntrackCommand implements Command {
     private final String COMMAND = "untrack";
     private final String DESCRIPTION = "Stop tracking link";
-    private final String ANSWER = "Enter the link to the repository or the question " +
-            "from which updates you want to unsubscribe:";
+    private final String ANSWER = "Enter the link to the repository or the question "
+        + "from which updates you want to unsubscribe:";
     private final String PLACEHOLDER = "https://github.com/user_name/repository_name";
 
     @Override

@@ -24,7 +24,7 @@ public class JdbcTrackRepository implements TrackRepository {
     private final String SQL_ADD = "INSERT INTO tracking (chat_id, link_id) VALUES (:chatId, :linkId) RETURNING *";
     private final String SQL_REMOVE = "DELETE FROM tracking WHERE chat_id=:chatId AND link_id=:linkId";
     private final String SQL_FIND_ALL = "SELECT * FROM tracking";
-    private final String SQL_IS_EXISTS = "SELECT EXISTS(SELECT 1 FROM tracking WHERE chat_id=:chatId AND link_id=:linkId)";
+    private final String SQL_EXISTS = "SELECT EXISTS(SELECT 1 FROM tracking WHERE chat_id=:chatId AND link_id=:linkId)";
     private final String SQL_IS_TRACKED_BY = "SELECT EXISTS(SELECT * FROM tracking WHERE link_id=:linkId)";
     private final String SQL_FIND_USER_TRACKS = "SELECT * FROM tracking WHERE chat_id=:chatId";
     private final String SQL_FIND_TRACKS_WITH_LINK = "SELECT * FROM tracking WHERE link_id=:linkId";
@@ -52,7 +52,8 @@ public class JdbcTrackRepository implements TrackRepository {
     @Override
     @Transactional
     public Boolean isTracked(@NotNull TgChat chat, @NotNull Link link) {
-        return jdbcTemplate.queryForObject(SQL_IS_EXISTS,
+        return jdbcTemplate.queryForObject(
+            SQL_EXISTS,
                 Map.of("chatId", chat.getId(),
                         "linkId", link.getId()),
                 Boolean.class);

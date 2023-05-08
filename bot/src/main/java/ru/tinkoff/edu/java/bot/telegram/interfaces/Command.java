@@ -12,7 +12,7 @@ public interface Command {
 
     SendMessage handle(@NotNull Update update);
 
-    default boolean supports(@NotNull Update update){
+    default boolean supports(@NotNull Update update) {
         return command().equals(update.message().text().substring(1));
     }
 

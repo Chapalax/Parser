@@ -37,7 +37,7 @@ public class JooqLinkRepository implements LinkRepository {
                 .returning()
                 .fetchOptional()
                 .orElseThrow(() -> new DataAccessException("Error inserting entity: " + object.getId()))
-                .map(record -> recordMapper.map((LinksRecord) record));
+                .map(linkRecord -> recordMapper.map((LinksRecord) linkRecord));
     }
 
     @Override
@@ -73,7 +73,7 @@ public class JooqLinkRepository implements LinkRepository {
                         .from(Links.LINKS)
                         .where(Links.LINKS.PATH.eq(link.getPath()))
                         .fetchOne())
-                .map(record -> recordMapper.map((LinksRecord) record));
+                .map(linkRecord -> recordMapper.map((LinksRecord) linkRecord));
     }
 
     @Override
@@ -83,7 +83,7 @@ public class JooqLinkRepository implements LinkRepository {
                         .from(Links.LINKS)
                         .where(Links.LINKS.ID.eq(link.getId()))
                         .fetchOne())
-                .map(record -> recordMapper.map((LinksRecord) record));
+                .map(linkRecord -> recordMapper.map((LinksRecord) linkRecord));
     }
 
     @Override

@@ -28,7 +28,9 @@ public class ScrapperLinksController {
     public ResponseEntity<ListLinksResponse> getAllLinks(@RequestHeader("Tg-Chat-Id") long tgChatId) {
         List<Link> linkList = linkService.listAll(tgChatId);
         ArrayList<LinkResponse> responseArrayList = new ArrayList<>();
-        for (Link link : linkList) responseArrayList.add(new LinkResponse(link.getId(), link.getPath()));
+        for (Link link : linkList) {
+            responseArrayList.add(new LinkResponse(link.getId(), link.getPath()));
+        }
         return new ResponseEntity<>(new ListLinksResponse(responseArrayList, responseArrayList.size()), HttpStatus.OK);
     }
 

@@ -16,8 +16,8 @@ import ru.tinkoff.edu.java.bot.web.clients.interfaces.WebClientScrapper;
 public class StartCommand implements Command {
     private final String COMMAND = "start";
     private final String DESCRIPTION = "Run the bot";
-    private final String ANSWER = "Thank you for using our bot!\n" +
-            "To get information about the bot, use the command /help";
+    private final String ANSWER = "Thank you for using our bot!\n"
+        + "To get information about the bot, use the command /help";
 
     private final WebClientScrapper scrapperClient;
 

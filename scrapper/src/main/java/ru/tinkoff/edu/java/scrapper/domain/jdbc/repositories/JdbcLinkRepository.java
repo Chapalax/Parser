@@ -27,16 +27,16 @@ public class JdbcLinkRepository implements LinkRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final RowMapper<Link> rowMapper = new LinkDataRowMapper();
 
-    private final String SQL_ADD = "INSERT INTO links (path, last_activity, action_count) " +
-            "VALUES (:path, :lastActivity, :actionCount) RETURNING *";
+    private final String SQL_ADD = "INSERT INTO links (path, last_activity, action_count) "
+        + "VALUES (:path, :lastActivity, :actionCount) RETURNING *";
     private final String SQL_REMOVE = "DELETE FROM links WHERE path=:path";
     private final String SQL_FIND_ALL = "SELECT * FROM links";
     private final String SQL_IS_EXISTS = "SELECT EXISTS(SELECT 1 FROM links WHERE path=:path)";
     private final String SQL_FIND_ONE_BY_URL = "SELECT 1 FROM links WHERE path=:path";
     private final String SQL_FIND_ONE_BY_ID = "SELECT 1 FROM links WHERE id=:id";
     private final String SQL_FIND_UPDATES = "SELECT * FROM links WHERE checked_at<:time";
-    private final String SQL_UPDATE_LINK = "UPDATE links SET last_activity=:lastActivity, " +
-            "action_count=:actionCount, checked_at=:checkedAt WHERE id=:id";
+    private final String SQL_UPDATE_LINK = "UPDATE links SET last_activity=:lastActivity, "
+        + "action_count=:actionCount, checked_at=:checkedAt WHERE id=:id";
 
     @Override
     @Transactional

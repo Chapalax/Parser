@@ -42,11 +42,11 @@ public class MainLinkUpdater implements LinkUpdater {
             log.info("Founded link to update: " + link.getPath());
             link.setCheckedAt(OffsetDateTime.now());
             linkRepository.update(link);
-            var record = ParserHandler.parse(URI.create(link.getPath()));
-            if (record instanceof ParsedGitHub) {
+            var parsed = ParserHandler.parse(URI.create(link.getPath()));
+            if (parsed instanceof ParsedGitHub) {
                 GitHubResponse ghResponse = gitHubClient.fetchGitHubRepository(
-                        ((ParsedGitHub) record).user(),
-                        ((ParsedGitHub) record).repository());
+                        ((ParsedGitHub) parsed).user(),
+                        ((ParsedGitHub) parsed).repository());
                 if (ghResponse.issuesCount() > link.getActionCount()) {
                     var issuesDiff = ghResponse.issuesCount() - link.getActionCount();
                     link.setActionCount(ghResponse.issuesCount());
@@ -77,9 +77,9 @@ public class MainLinkUpdater implements LinkUpdater {
                             getUsers(link)));
                 }
             }
-            if (record instanceof ParsedStackOverflow) {
+            if (parsed instanceof ParsedStackOverflow) {
                 StackOverflowResponse soResponse = stackOverflowClient.fetchStackOverflowQuestion(
-                        ((ParsedStackOverflow) record).id());
+                        ((ParsedStackOverflow) parsed).id());
                 if (soResponse.answersCount() > link.getActionCount()) {
                     var answersDiff = soResponse.answersCount() - link.getActionCount();
                     link.setActionCount(soResponse.answersCount());
@@ -117,7 +117,7 @@ public class MainLinkUpdater implements LinkUpdater {
     private @NotNull ArrayList<Long> getUsers(Link link) {
         List<Track> allTracks = trackRepository.findAllTracksWithLink(link);
         ArrayList<Long> users = new ArrayList<>();
-        for(Track track : allTracks) {
+        for (Track track : allTracks) {
             users.add(track.getChatId());
         }
         return users;

@@ -25,7 +25,9 @@ public class ScrapperExceptionsController {
 
     private ApiErrorResponse createError(@NotNull Throwable exception, String description, HttpStatus httpStatus) {
         ArrayList<String> stacktrace = new ArrayList<>(exception.getStackTrace().length);
-        for (StackTraceElement line : exception.getStackTrace()) stacktrace.add(line.toString());
+        for (StackTraceElement line : exception.getStackTrace()) {
+            stacktrace.add(line.toString());
+        }
         return new ApiErrorResponse(description, Integer.toString(httpStatus.value()), httpStatus.getReasonPhrase(),
                 exception.getMessage(), stacktrace);
     }

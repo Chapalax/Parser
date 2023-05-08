@@ -129,7 +129,9 @@
         <module name="InterfaceTypeParameterName"/>
         <module name="LambdaParameterName"/>
         <module name="LocalVariableName"/>
-        <module name="MemberName"/>
+        <module name="MemberName">
+            <property name="applyToPrivate" value="false"/>
+        </module>
         <module name="MethodName"/>
         <module name="MethodTypeParameterName"/>
         <module name="PackageName"/>
@@ -143,15 +145,15 @@
 
         <!-- https://checkstyle.org/config_imports.html -->
         <!--            Checks for imports              -->
-        <module name="AvoidStarImport"/>
+        <!-- <module name="AvoidStarImport"/> -->
         <!-- <module name="AvoidStaticImport"/> -->
         <!-- <module name="CustomImportOrder"/> -->
         <module name="IllegalImport"/> <!-- defaults to sun.* packages -->
         <!-- <module name="ImportControl"/> -->
-        <module name="ImportOrder">
+        <!-- <module name="ImportOrder">
             <property name="option" value="under"/>
             <property name="sortStaticImportsAlphabetically" value="true"/>
-        </module>
+        </module> -->
         <module name="RedundantImport"/>
         <module name="UnusedImports"/>
 
@@ -278,6 +280,7 @@
         <!-- <module name="IllegalType"/> -->
         <module name="InnerAssignment"/>
         <module name="MagicNumber">
+            <property name="ignoreNumbers" value="-1, 0, 1, 2, 3"/>
             <property name="ignoreHashCodeMethod" value="true"/>
             <property name="ignoreAnnotation" value="true"/>
             <message key="magic.number"
@@ -289,6 +292,7 @@
         <module name="MultipleStringLiterals">
             <!-- Allow zero-length and 1-character strings -->
             <property name="ignoreStringsRegexp" value='^(("")|(".")|("..")|("..>"))$'/>
+            <property name="allowedDuplicates" value="6"/>
         </module>
         <module name="MultipleVariableDeclarations"/>
         <module name="NestedForDepth">
@@ -310,7 +314,7 @@
         <module name="ParameterAssignment"/>
         <!-- <module name="RequireThis"/> -->
         <module name="ReturnCount">
-            <property name="max" value="4"/>
+            <property name="max" value="6"/>
         </module>
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>

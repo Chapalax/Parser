@@ -18,7 +18,9 @@ public class MainTgChatService implements TgChatService {
     public void register(long tgChatId) {
         TgChat chat = new TgChat();
         chat.setId(tgChatId);
-        if(tgChatRepository.isExists(chat)) throw new RegisteredUserExistsException("You're already registered");
+        if (tgChatRepository.isExists(chat)) {
+            throw new RegisteredUserExistsException("You're already registered");
+        }
         tgChatRepository.add(chat);
     }
 
@@ -26,6 +28,8 @@ public class MainTgChatService implements TgChatService {
     public void unregister(long tgChatId) {
         TgChat chat = new TgChat();
         chat.setId(tgChatId);
-        if(tgChatRepository.remove(chat) == 0) throw new ChatNotFoundException("Chat not found.");
+        if (tgChatRepository.remove(chat) == 0) {
+            throw new ChatNotFoundException("Chat not found.");
+        }
     }
 }

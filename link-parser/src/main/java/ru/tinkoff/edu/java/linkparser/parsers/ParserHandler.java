@@ -1,10 +1,13 @@
 package ru.tinkoff.edu.java.linkparser.parsers;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.URI;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ParserHandler {
 
     @Nullable

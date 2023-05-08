@@ -8,7 +8,7 @@ import java.util.ArrayList;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class ApiErrorResponse extends Exception{
+public class ApiErrorResponse extends Exception {
     String description;
     String code;
     String exceptionName;

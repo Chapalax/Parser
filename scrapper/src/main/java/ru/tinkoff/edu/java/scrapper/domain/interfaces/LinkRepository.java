@@ -4,7 +4,7 @@ import ru.tinkoff.edu.java.scrapper.domain.models.Link;
 
 import java.util.List;
 
-public interface LinkRepository extends Dao<Link>{
+public interface LinkRepository extends Dao<Link> {
     Boolean isExists(Link link);
 
     Link findByUrl(Link link);
