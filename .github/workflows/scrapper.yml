@@ -29,6 +29,17 @@ env:
   IMAGE_VERSION: latest
 
 jobs:
+  checkstyle:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Checking ${{ env.MODULE_NAME }} code style
+        run: mvn -pl ${{ env.MODULE_NAME }} -am checkstyle:check
+
   build:
 
     runs-on: ubuntu-latest
