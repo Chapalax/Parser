@@ -40,9 +40,9 @@ public class JooqTgChatRepository implements TgChatRepository {
     public List<TgChat> findAll() {
         return dsl.selectFrom(Chats.CHATS)
                 .stream()
-                .map(record -> {
+                .map(chatsRecord -> {
                     TgChat chat = new TgChat();
-                    chat.setId(record.getId());
+                    chat.setId(chatsRecord.getId());
                     return chat;
                 })
                 .toList();

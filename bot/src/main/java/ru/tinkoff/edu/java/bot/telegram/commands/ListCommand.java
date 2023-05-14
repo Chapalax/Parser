@@ -15,8 +15,8 @@ public class ListCommand implements Command {
     private final String COMMAND = "list";
     private final String DESCRIPTION = "Show list of tracked links";
     private final String ANSWER = "The list of links you are tracking:\n";
-    private final String WARNING = "You are not tracking any links yet!\n" +
-            "To start tracking updates, use the command /track";
+    private final String WARNING = "You are not tracking any links yet!\n"
+        + "To start tracking updates, use the command /track";
 
     private final WebClientScrapper scrapperClient;
 
@@ -34,7 +34,9 @@ public class ListCommand implements Command {
     public SendMessage handle(@NotNull Update update) {
         try {
             var links = scrapperClient.getAllLinks(update.message().chat().id());
-            if (links.size() == 0) return new SendMessage(update.message().chat().id(), WARNING);
+            if (links.size() == 0) {
+                return new SendMessage(update.message().chat().id(), WARNING);
+            }
             var message = new StringBuilder();
             message.append(ANSWER);
             for (int i = 0; i < links.size(); i++) {

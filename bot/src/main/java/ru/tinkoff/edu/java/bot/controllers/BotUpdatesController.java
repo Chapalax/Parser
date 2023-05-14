@@ -15,7 +15,7 @@ import ru.tinkoff.edu.java.bot.telegram.TrackerBot;
 public class BotUpdatesController {
 
     @PostMapping
-    public ResponseEntity<HttpStatus> postSendUpdate(@RequestBody @Valid LinkUpdateRequest linkUpdate){
+    public ResponseEntity<HttpStatus> postSendUpdate(@RequestBody @Valid LinkUpdateRequest linkUpdate) {
         TrackerBot.sendUpdates(linkUpdate);
         return ResponseEntity.ok(HttpStatus.OK);
     }

@@ -19,14 +19,14 @@ public class UserMessageHandler implements UserMessageProcessor {
     private final String SUCCESSFUL_TRACK = "The link has been successfully added!";
     private final String SUCCESSFUL_UNTRACK = "The link has been successfully deleted!";
     private final String REPLY_TRACK = "Enter a link to the repository or question you are interested in:";
-    private final String REPLY_UNTRACK = "Enter the link to the repository or the question " +
-            "from which updates you want to unsubscribe:";
+    private final String REPLY_UNTRACK = "Enter the link to the repository or the question "
+        + "from which updates you want to unsubscribe:";
 
     private final WebClientScrapper scrapperClient;
 
     private final List<? extends Command> commands;
 
-    public UserMessageHandler(WebClientScrapper scrapperClient, Command ... commands) {
+    public UserMessageHandler(WebClientScrapper scrapperClient, Command... commands) {
         this.scrapperClient = scrapperClient;
         this.commands = Arrays.stream(commands).toList();
     }
@@ -38,8 +38,10 @@ public class UserMessageHandler implements UserMessageProcessor {
 
     @Override
     public SendMessage process(Update update) {
-        for(var command : commands) {
-            if(command.supports(update)) return command.handle(update);
+        for (var command : commands) {
+            if (command.supports(update)) {
+                return command.handle(update);
+            }
         }
         if (isReplyTrack(update)) {
             try {

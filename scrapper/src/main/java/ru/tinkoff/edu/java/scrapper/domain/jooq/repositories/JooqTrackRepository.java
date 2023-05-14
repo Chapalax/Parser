@@ -44,10 +44,10 @@ public class JooqTrackRepository implements TrackRepository {
     public List<Track> findAll() {
         return dsl.selectFrom(Tracking.TRACKING)
                 .stream()
-                .map(record -> {
+                .map(trackingRecord -> {
                     Track track = new Track();
-                    track.setChatId(record.getChatId());
-                    track.setLinkId(record.getLinkId());
+                    track.setChatId(trackingRecord.getChatId());
+                    track.setLinkId(trackingRecord.getLinkId());
                     return track;
                 })
                 .toList();
@@ -79,10 +79,10 @@ public class JooqTrackRepository implements TrackRepository {
         return dsl.selectFrom(Tracking.TRACKING)
                 .where(Tracking.TRACKING.CHAT_ID.eq(chat.getId()))
                 .stream()
-                .map(record -> {
+                .map(trackingRecord -> {
                     Track track = new Track();
-                    track.setChatId(record.getChatId());
-                    track.setLinkId(record.getLinkId());
+                    track.setChatId(trackingRecord.getChatId());
+                    track.setLinkId(trackingRecord.getLinkId());
                     return track;
                 })
                 .toList();
@@ -94,10 +94,10 @@ public class JooqTrackRepository implements TrackRepository {
         return dsl.selectFrom(Tracking.TRACKING)
                 .where(Tracking.TRACKING.LINK_ID.eq(link.getId()))
                 .stream()
-                .map(record -> {
+                .map(trackingRecord -> {
                     Track track = new Track();
-                    track.setChatId(record.getChatId());
-                    track.setLinkId(record.getLinkId());
+                    track.setChatId(trackingRecord.getChatId());
+                    track.setLinkId(trackingRecord.getLinkId());
                     return track;
                 })
                 .toList();

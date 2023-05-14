@@ -23,6 +23,7 @@ public class BotClient implements WebClientBot {
     public BotClient(@URL String url) {
         webClient = WebClient.create(url);
     }
+
     @Override
     public HttpStatus sendUpdates(LinkUpdateResponse linkUpdate) {
         return webClient.post()

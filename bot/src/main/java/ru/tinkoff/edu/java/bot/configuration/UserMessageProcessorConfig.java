@@ -15,6 +15,9 @@ public class UserMessageProcessorConfig {
     public UserMessageProcessor userMessageProcessor(WebClientScrapper scrapperClient, StartCommand startCommand,
                                                      HelpCommand helpCommand, TrackCommand trackCommand,
                                                      UntrackCommand untrackCommand, ListCommand listCommand) {
-        return new UserMessageHandler(scrapperClient, startCommand, helpCommand, trackCommand, untrackCommand, listCommand);
+        return new UserMessageHandler(
+            scrapperClient, startCommand, helpCommand,
+            trackCommand, untrackCommand, listCommand
+        );
     }
 }

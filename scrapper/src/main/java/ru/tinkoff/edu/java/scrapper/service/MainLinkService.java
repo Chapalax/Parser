@@ -15,6 +15,7 @@ import ru.tinkoff.edu.java.scrapper.domain.models.Track;
 import ru.tinkoff.edu.java.scrapper.exceptions.AddedLinkExistsException;
 import ru.tinkoff.edu.java.scrapper.exceptions.ChatNotFoundException;
 import ru.tinkoff.edu.java.scrapper.exceptions.LinkNotFoundException;
+import ru.tinkoff.edu.java.scrapper.service.interfaces.LinkService;
 import ru.tinkoff.edu.java.scrapper.web.clients.dto.GitHubResponse;
 import ru.tinkoff.edu.java.scrapper.web.clients.dto.StackOverflowResponse;
 import ru.tinkoff.edu.java.scrapper.web.clients.interfaces.WebClientGitHub;
@@ -26,7 +27,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class LinkService implements ru.tinkoff.edu.java.scrapper.service.interfaces.LinkService {
+public class MainLinkService implements LinkService {
 
     private final LinkRepository linkRepository;
     private final TgChatRepository tgChatRepository;
@@ -39,34 +40,42 @@ public class LinkService implements ru.tinkoff.edu.java.scrapper.service.interfa
         TgChat chat = new TgChat();
         chat.setId(tgChatId);
 
-        if(!tgChatRepository.isExists(chat)) throw new ChatNotFoundException("Chat not found.");
-        var record = ParserHandler.parse(url);
-        if(record == null) throw new LinkNotFoundException("This link type is not supported.");
+        if (!tgChatRepository.isExists(chat)) {
+            throw new ChatNotFoundException("Chat not found.");
+        }
+        var parsed = ParserHandler.parse(url);
+        if (parsed == null) {
+            throw new LinkNotFoundException("This link type is not supported.");
+        }
 
         Link link = new Link();
         link.setPath(url.toString());
 
-        if(record instanceof ParsedGitHub) {
-            if(linkRepository.isExists(link)) {
+        if (parsed instanceof ParsedGitHub) {
+            if (linkRepository.isExists(link)) {
                 link = linkRepository.findByUrl(link);
-                if(trackRepository.isTracked(chat, link)) throw new AddedLinkExistsException("Link already added.");
+                if (trackRepository.isTracked(chat, link)) {
+                    throw new AddedLinkExistsException("Link already added.");
+                }
             } else {
                 GitHubResponse response = gitHubClient.fetchGitHubRepository(
-                        ((ParsedGitHub) record).user(),
-                        ((ParsedGitHub) record).repository());
+                        ((ParsedGitHub) parsed).user(),
+                        ((ParsedGitHub) parsed).repository());
                 link.setLastActivity(response.updatedAt());
                 link.setActionCount(response.issuesCount());
                 link = linkRepository.add(link);
             }
         }
 
-        if(record instanceof ParsedStackOverflow){
-            if(linkRepository.isExists(link)) {
+        if (parsed instanceof ParsedStackOverflow) {
+            if (linkRepository.isExists(link)) {
                 link = linkRepository.findByUrl(link);
-                if(trackRepository.isTracked(chat, link)) throw new AddedLinkExistsException("Link already added.");
+                if (trackRepository.isTracked(chat, link)) {
+                    throw new AddedLinkExistsException("Link already added.");
+                }
             } else {
                 StackOverflowResponse response = stackOverflowClient.fetchStackOverflowQuestion(
-                        ((ParsedStackOverflow) record).id());
+                        ((ParsedStackOverflow) parsed).id());
                 link.setLastActivity(response.lastActivity());
                 link.setActionCount(response.answersCount());
                 link = linkRepository.add(link);
@@ -84,19 +93,29 @@ public class LinkService implements ru.tinkoff.edu.java.scrapper.service.interfa
     public Link remove(long tgChatId, @NotNull URI url) {
         TgChat chat = new TgChat();
         chat.setId(tgChatId);
-        if(!tgChatRepository.isExists(chat)) throw new ChatNotFoundException("Chat not found.");
-        var record = ParserHandler.parse(url);
-        if(record == null) throw new LinkNotFoundException("Link not found.");
+        if (!tgChatRepository.isExists(chat)) {
+            throw new ChatNotFoundException("Chat not found.");
+        }
+        var parsed = ParserHandler.parse(url);
+        if (parsed == null) {
+            throw new LinkNotFoundException("Link not found.");
+        }
         Link link = new Link();
         link.setPath(url.toString());
 
-        if(!linkRepository.isExists(link)) throw new LinkNotFoundException("Link not found.");
+        if (!linkRepository.isExists(link)) {
+            throw new LinkNotFoundException("Link not found.");
+        }
         link = linkRepository.findByUrl(link);
         Track track = new Track();
         track.setChatId(tgChatId);
         track.setLinkId(link.getId());
-        if(trackRepository.remove(track) == 0) throw new LinkNotFoundException("You are not following this link.");
-        if(!trackRepository.isTrackedByAnyone(link)) linkRepository.remove(link);
+        if (trackRepository.remove(track) == 0) {
+            throw new LinkNotFoundException("You are not following this link.");
+        }
+        if (!trackRepository.isTrackedByAnyone(link)) {
+            linkRepository.remove(link);
+        }
         return link;
     }
 
@@ -106,9 +125,11 @@ public class LinkService implements ru.tinkoff.edu.java.scrapper.service.interfa
         chat.setId(tgChatId);
         List<Link> links = new ArrayList<>();
 
-        if(!tgChatRepository.isExists(chat)) throw new ChatNotFoundException("Chat not found.");
+        if (!tgChatRepository.isExists(chat)) {
+            throw new ChatNotFoundException("Chat not found.");
+        }
         List<Track> allTracks = trackRepository.findAllTracksByUser(chat);
-        for(Track current : allTracks) {
+        for (Track current : allTracks) {
             Link temp = new Link();
             temp.setId(current.getLinkId());
             links.add(linkRepository.findById(temp));

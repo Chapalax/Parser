@@ -49,8 +49,11 @@ public class TrackerBot implements Bot {
     @Override
     public int process(@NotNull List<Update> list) {
         for (Update update : list) {
-            if (update.myChatMember() != null) userMessageProcessor.deleteChat(update);
-            else bot.execute(userMessageProcessor.process(update));
+            if (update.myChatMember() != null) {
+                userMessageProcessor.deleteChat(update);
+            } else {
+                bot.execute(userMessageProcessor.process(update));
+            }
         }
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }

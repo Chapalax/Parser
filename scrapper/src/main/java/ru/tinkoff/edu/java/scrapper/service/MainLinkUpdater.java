@@ -12,6 +12,7 @@ import ru.tinkoff.edu.java.scrapper.domain.interfaces.TrackRepository;
 import ru.tinkoff.edu.java.scrapper.domain.models.Link;
 import ru.tinkoff.edu.java.scrapper.domain.models.Track;
 import ru.tinkoff.edu.java.scrapper.dto.LinkUpdateResponse;
+import ru.tinkoff.edu.java.scrapper.service.interfaces.LinkUpdater;
 import ru.tinkoff.edu.java.scrapper.service.interfaces.MessageSender;
 import ru.tinkoff.edu.java.scrapper.web.clients.dto.GitHubResponse;
 import ru.tinkoff.edu.java.scrapper.web.clients.dto.StackOverflowResponse;
@@ -26,7 +27,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LinkUpdater implements ru.tinkoff.edu.java.scrapper.service.interfaces.LinkUpdater {
+public class MainLinkUpdater implements LinkUpdater {
 
     private final MessageSender sender;
     private final WebClientGitHub gitHubClient;
@@ -41,11 +42,11 @@ public class LinkUpdater implements ru.tinkoff.edu.java.scrapper.service.interfa
             log.info("Founded link to update: " + link.getPath());
             link.setCheckedAt(OffsetDateTime.now());
             linkRepository.update(link);
-            var record = ParserHandler.parse(URI.create(link.getPath()));
-            if (record instanceof ParsedGitHub) {
+            var parsed = ParserHandler.parse(URI.create(link.getPath()));
+            if (parsed instanceof ParsedGitHub) {
                 GitHubResponse ghResponse = gitHubClient.fetchGitHubRepository(
-                        ((ParsedGitHub) record).user(),
-                        ((ParsedGitHub) record).repository());
+                        ((ParsedGitHub) parsed).user(),
+                        ((ParsedGitHub) parsed).repository());
                 if (ghResponse.issuesCount() > link.getActionCount()) {
                     var issuesDiff = ghResponse.issuesCount() - link.getActionCount();
                     link.setActionCount(ghResponse.issuesCount());
@@ -76,9 +77,9 @@ public class LinkUpdater implements ru.tinkoff.edu.java.scrapper.service.interfa
                             getUsers(link)));
                 }
             }
-            if (record instanceof ParsedStackOverflow) {
+            if (parsed instanceof ParsedStackOverflow) {
                 StackOverflowResponse soResponse = stackOverflowClient.fetchStackOverflowQuestion(
-                        ((ParsedStackOverflow) record).id());
+                        ((ParsedStackOverflow) parsed).id());
                 if (soResponse.answersCount() > link.getActionCount()) {
                     var answersDiff = soResponse.answersCount() - link.getActionCount();
                     link.setActionCount(soResponse.answersCount());
@@ -116,7 +117,7 @@ public class LinkUpdater implements ru.tinkoff.edu.java.scrapper.service.interfa
     private @NotNull ArrayList<Long> getUsers(Link link) {
         List<Track> allTracks = trackRepository.findAllTracksWithLink(link);
         ArrayList<Long> users = new ArrayList<>();
-        for(Track track : allTracks) {
+        for (Track track : allTracks) {
             users.add(track.getChatId());
         }
         return users;

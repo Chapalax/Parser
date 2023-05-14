@@ -16,9 +16,9 @@ public class LinkRecordUnmapper implements RecordUnmapper<Link, LinksRecord> {
 
     @Override
     public @NotNull LinksRecord unmap(Link link) throws MappingException {
-        LinksRecord record = dsl.newRecord(Links.LINKS, link);
-        record.setLastActivity(link.getLastActivity().toLocalDateTime());
-        record.setCheckedAt(link.getCheckedAt().toLocalDateTime());
-        return record;
+        LinksRecord linksRecord = dsl.newRecord(Links.LINKS, link);
+        linksRecord.setLastActivity(link.getLastActivity().toLocalDateTime());
+        linksRecord.setCheckedAt(link.getCheckedAt().toLocalDateTime());
+        return linksRecord;
     }
 }
