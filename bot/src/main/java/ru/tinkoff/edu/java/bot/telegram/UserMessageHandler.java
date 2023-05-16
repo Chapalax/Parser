@@ -28,7 +28,7 @@ public class UserMessageHandler implements UserMessageProcessor {
 
     private final List<? extends Command> commands;
 
-    public UserMessageHandler(WebClientScrapper scrapperClient, Command... commands) {
+    public UserMessageHandler(@NotNull WebClientScrapper scrapperClient, @NotNull Command... commands) {
         this.scrapperClient = scrapperClient;
         this.commands = Arrays.stream(commands).toList();
     }
