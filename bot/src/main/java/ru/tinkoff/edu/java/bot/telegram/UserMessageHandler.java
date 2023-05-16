@@ -3,6 +3,7 @@ package ru.tinkoff.edu.java.bot.telegram;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import ru.tinkoff.edu.java.bot.telegram.interfaces.Command;
 import ru.tinkoff.edu.java.bot.telegram.interfaces.UserMessageProcessor;
@@ -14,6 +15,7 @@ import ru.tinkoff.edu.java.bot.web.clients.interfaces.WebClientScrapper;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 public class UserMessageHandler implements UserMessageProcessor {
     private final String WARNING = "This command does not exist.\nList of available commands: /help";
     private final String SUCCESSFUL_TRACK = "The link has been successfully added!";
@@ -64,7 +66,12 @@ public class UserMessageHandler implements UserMessageProcessor {
 
     @Override
     public void deleteChat(@NotNull Update update) {
-        scrapperClient.deleteChat(update.myChatMember().chat().id());
+        try {
+            scrapperClient.deleteChat(update.myChatMember().chat().id());
+            log.info("User: " + update.myChatMember().chat().id().toString() + " has blocked the bot.");
+        } catch (ApiErrorResponse errorResponse) {
+            log.warn("User: " + update.myChatMember().chat().id().toString() + " not registered.");
+        }
     }
 
     private SendMessage createSendMessage(@NotNull Update update, String message) {
