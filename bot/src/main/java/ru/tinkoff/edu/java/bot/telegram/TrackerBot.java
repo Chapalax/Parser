@@ -6,6 +6,8 @@ import com.pengrad.telegrambot.model.BotCommand;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SetMyCommands;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.annotation.PostConstruct;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +26,14 @@ public class TrackerBot implements Bot {
 
     private final UserMessageProcessor userMessageProcessor;
 
+    private final Counter processedMessagesCounter;
+
     @Autowired
-    public TrackerBot(UserMessageProcessor messageProcessor, @Value("${app.token}") String token) {
-        userMessageProcessor = messageProcessor;
+    public TrackerBot(@NotNull UserMessageProcessor messageProcessor, @NotNull MeterRegistry meterRegistry,
+        @Value("${app.token}") String token
+    ) {
+        this.userMessageProcessor = messageProcessor;
+        this.processedMessagesCounter = meterRegistry.counter("bot_processed_messages_counter");
         bot = new TelegramBot(token);
     }
 
@@ -53,6 +60,7 @@ public class TrackerBot implements Bot {
                 userMessageProcessor.deleteChat(update);
             } else {
                 bot.execute(userMessageProcessor.process(update));
+                processedMessagesCounter.increment();
             }
         }
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
