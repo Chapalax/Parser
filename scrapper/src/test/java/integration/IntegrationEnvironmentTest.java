@@ -9,6 +9,13 @@ import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Used for testing database scheme needed when running the application.
+ * See the base integration environment testing class at @see IntegrationEnvironment
+ * @author Maxim Berezhnoy
+ * @version 1.0 
+ */
+
 public class IntegrationEnvironmentTest extends IntegrationEnvironment{
     @Test
     @SneakyThrows
