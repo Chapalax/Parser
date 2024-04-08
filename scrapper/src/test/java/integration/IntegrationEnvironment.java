@@ -19,6 +19,13 @@ import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * Used for setting up common environment for intergration (PostreSQL container & database, liquibase, path to migrations, JDBC connection and properties). Used for integration testing.
+ * Every class which integration is to be tested has to be extended from current class.
+ * @author Maxim Berezhnoy
+ * @version 1.0 
+ */
+
 @Testcontainers
 public abstract class IntegrationEnvironment {
     static final PostgreSQLContainer<?> SQL_CONTAINER;
