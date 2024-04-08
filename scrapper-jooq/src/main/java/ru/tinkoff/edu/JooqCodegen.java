@@ -17,6 +17,14 @@ import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+
+
+/**
+ * Class for generating SQL code for database, starting database inside docker container, and setting up a connection. Runs if Databases' schemas are changed.
+ * Databases used: PostgreSQL, Liquibase. 
+ * @author Maxim Berezhnoy
+ * @version 1.0
+ */
 public class JooqCodegen {
     static final PostgreSQLContainer<?> SQL_JOOQ_CONTAINER;
     private static final Path MIGRATIONS_PATH = new File(".")
