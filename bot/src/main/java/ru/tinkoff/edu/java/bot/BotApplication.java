@@ -7,6 +7,12 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import ru.tinkoff.edu.java.bot.configuration.ApplicationConfig;
 import ru.tinkoff.edu.java.bot.configuration.ScrapperClientConfig;
 
+
+/**
+ * Entry point to the application. Attaches defined configs to class and runs the bot with command-line arguments
+ * @author Maxim Berezhnoy
+ * @version 1.0
+ */
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @EnableConfigurationProperties({ApplicationConfig.class, ScrapperClientConfig.class})
 public class BotApplication {
