@@ -11,7 +11,7 @@ import ru.tinkoff.edu.java.bot.web.clients.dto.*;
 import ru.tinkoff.edu.java.bot.web.clients.interfaces.WebClientScrapper;
 
 /**
- * Concrete class implementing WebClientScrapper interface. Realizes methods defined in WebClientScrapper interface
+ * Concrete class implementing WebClientScrapper interface. Realizes methods defined in WebClientScrapper interface.
  * @see WebClientScrapper
  * @author Maxim Berezhnoy
  * @version 1.0
