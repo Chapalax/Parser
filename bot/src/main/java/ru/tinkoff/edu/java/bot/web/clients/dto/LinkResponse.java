@@ -3,9 +3,9 @@ package ru.tinkoff.edu.java.bot.web.clients.dto;
 import java.net.URI;
 
 /**
- * DTO representing response for concrete user to interact with repository
+ * DTO representing response for concrete user interacting with repository
  * @param id Telegram ID of concrete user
- * @param URL URL of concrete repository
+ * @param url URL of concrete repository
  * 
  * @author Maxim Berezhnoy
  * @version 1.0

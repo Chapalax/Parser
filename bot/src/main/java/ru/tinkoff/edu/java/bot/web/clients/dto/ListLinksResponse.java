@@ -15,4 +15,5 @@ import java.util.ArrayList;
  * @version 1.0
  */
 public record ListLinksResponse(@NotNull ArrayList<LinkResponse> links, int size) {
+
 }

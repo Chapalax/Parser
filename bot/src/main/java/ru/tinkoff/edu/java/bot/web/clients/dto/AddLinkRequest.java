@@ -6,7 +6,6 @@ import org.hibernate.validator.constraints.URL;
 /**
  * DTO representing request to add new repository for concrete user
  * @param link URL to concrete repository
- * 
  * @author Maxim Berezhnoy
  * @version 1.0
  */
