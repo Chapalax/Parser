@@ -10,6 +10,12 @@ import reactor.core.publisher.Mono;
 import ru.tinkoff.edu.java.bot.web.clients.dto.*;
 import ru.tinkoff.edu.java.bot.web.clients.interfaces.WebClientScrapper;
 
+/**
+ * Concrete class implementing WebClientScrapper interface. Realizes methods defined in WebClientScrapper interface
+ * @see WebClientScrapper
+ * @author Maxim Berezhnoy
+ * @version 1.0
+ */
 public class ScrapperClient implements WebClientScrapper {
     private final String REQUEST_HEADER = "Tg-Chat-Id";
 
@@ -18,14 +24,24 @@ public class ScrapperClient implements WebClientScrapper {
 
     private final WebClient webClient;
 
+    /**
+     * Method responsible for instantiating web client with base url
+     */
     public ScrapperClient() {
         webClient = WebClient.create(baseUrl);
     }
 
+    /**
+     * Method responsible for instantiating web client with defined url
+     * @param url URL that is to be assigned to web client
+     */
     public ScrapperClient(@URL String url) {
         webClient = WebClient.create(url);
     }
 
+    /**
+     * Realizes WebClientInterface's method {@link WebClientScrapper#getAllLinks(long)}
+     */
     @Override
     public ListLinksResponse getAllLinks(long tgChatId) {
         return webClient.get()
@@ -39,6 +55,9 @@ public class ScrapperClient implements WebClientScrapper {
                 .block();
     }
 
+    /**
+     * Realizes WebClientInterface's method {@link WebClientScrapper#addLink(long, AddLinkRequest)}
+     */
     @Override
     public LinkResponse addLink(long tgChatId, AddLinkRequest addLinkRequest) {
         return webClient.post()
@@ -53,6 +72,9 @@ public class ScrapperClient implements WebClientScrapper {
                 .block();
     }
 
+    /**
+     * Realizes WebClientInterface's method {@link WebClientScrapper#deleteLink(long, RemoveLinkRequest)}
+     */
     @Override
     public LinkResponse deleteLink(long tgChatId, RemoveLinkRequest removeLinkRequest) {
         return webClient.method(HttpMethod.DELETE)
@@ -67,6 +89,9 @@ public class ScrapperClient implements WebClientScrapper {
                 .block();
     }
 
+    /**
+     * Realizes WebClientInterface's method {@link WebClientScrapper#registerChat(long)}
+     */
     @Override
     public HttpStatus registerChat(long id) {
         return webClient.post()
@@ -79,6 +104,9 @@ public class ScrapperClient implements WebClientScrapper {
                 .block();
     }
 
+    /**
+     * Realizes WebClientInterface's method {@link WebClientScrapper#deleteChat(long)}
+     */
     @Override
     public HttpStatus deleteChat(long id) {
         return webClient.delete()
