@@ -20,6 +20,12 @@ import ru.tinkoff.edu.java.bot.telegram.interfaces.UserMessageProcessor;
 
 import java.util.List;
 
+/**
+ * Concrete implementation of Bot
+ * @see Bot
+ * @author Maxim Berezhnoy
+ * @version 1.0
+ */
 @Component
 public class TrackerBot implements Bot {
     private static TelegramBot bot;
@@ -28,6 +34,15 @@ public class TrackerBot implements Bot {
 
     private final Counter processedMessagesCounter;
 
+    /**
+     * Instantiating instance of the class with defined token
+     * @param messageProcessor Pre-setup UserMessageProcessor
+     * @see UserMessageProcessor
+     * 
+     * @param meterRegistry Container for scraping metrics and exporting them to Prometheus 
+     * @see MeterRegistry
+     * @param token Token assigned to bot from Telegram API
+     */
     @Autowired
     public TrackerBot(@NotNull UserMessageProcessor messageProcessor, @NotNull MeterRegistry meterRegistry,
         @Value("${app.token}") String token
@@ -37,6 +52,9 @@ public class TrackerBot implements Bot {
         bot = new TelegramBot(token);
     }
 
+    /**
+     * Method implementing {@link Bot#start()} interface
+     */
     @PostConstruct
     @Override
     public void start() {
@@ -48,11 +66,17 @@ public class TrackerBot implements Bot {
                 .toArray(BotCommand[]::new)));
     }
 
+    /**
+     * Method implementing {@link Bot#close()} interface
+     */
     @Override
     public void close() {
         bot.removeGetUpdatesListener();
     }
 
+    /**
+     * Method implementing {@link Bot#process(List)()} interface
+     */
     @Override
     public int process(@NotNull List<Update> list) {
         for (Update update : list) {
@@ -66,6 +90,11 @@ public class TrackerBot implements Bot {
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
 
+    /**
+     * Method for sending messages to users about their tracked repositories
+     * @param updates Received repository updates from Telegram API
+     * @see LinkUpdateRequest
+     */
     public static void sendUpdates(@NotNull LinkUpdateRequest updates) {
         for (Long tgChatId : updates.tgChatIds()) {
             bot.execute(new SendMessage(

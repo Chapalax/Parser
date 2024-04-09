@@ -10,6 +10,12 @@ import ru.tinkoff.edu.java.bot.telegram.interfaces.Command;
 import ru.tinkoff.edu.java.bot.web.clients.dto.ApiErrorResponse;
 import ru.tinkoff.edu.java.bot.web.clients.interfaces.WebClientScrapper;
 
+/**
+ * Command initializing contact between bot and user. Implements Command interface.
+ * @see Command
+ * @author Maxim Berezhnoy
+ * @version 1.0
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -21,16 +27,25 @@ public class StartCommand implements Command {
 
     private final WebClientScrapper scrapperClient;
 
+    /**
+     * {@link Commmand#command()}
+     */
     @Override
     public String command() {
         return COMMAND;
     }
 
+    /**
+     * {@link Commmand#description()}
+     */
     @Override
     public String description() {
         return DESCRIPTION;
     }
 
+    /**
+     * {@link Command#handle(Update)}
+     */
     @Override
     public SendMessage handle(@NotNull Update update) {
         try {

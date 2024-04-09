@@ -15,6 +15,12 @@ import ru.tinkoff.edu.java.bot.web.clients.interfaces.WebClientScrapper;
 import java.util.Arrays;
 import java.util.List;
 
+
+/**
+ * Class representing concrete User Message Handler. Implements UserMessageProcessor interface.
+ * @author Maxim Berezhnoy
+ * @version 1.0
+ */
 @Slf4j
 public class UserMessageHandler implements UserMessageProcessor {
     private final String WARNING = "This command does not exist.\nList of available commands: /help";
@@ -28,16 +34,30 @@ public class UserMessageHandler implements UserMessageProcessor {
 
     private final List<? extends Command> commands;
 
+    /**
+     * Instantiating object with defined supported commands and defined pre-setup scrapper
+     * @param scrapperClient Interface link to any Scrapper that supports WebClientScrapper interface
+     * @see WebClientScrapper 
+     * 
+     * @param commands List of supported commands by this class
+     * @see Command
+     */
     public UserMessageHandler(@NotNull WebClientScrapper scrapperClient, @NotNull Command... commands) {
         this.scrapperClient = scrapperClient;
         this.commands = Arrays.stream(commands).toList();
     }
 
+    /**
+     * {@link UserMessageProcessor#commands()}
+     */
     @Override
     public List<? extends Command> commands() {
         return commands;
     }
 
+    /**
+     * {@link UserMessageProcessor#process(Update)}
+     */
     @Override
     public SendMessage process(Update update) {
         for (var command : commands) {
@@ -64,6 +84,9 @@ public class UserMessageHandler implements UserMessageProcessor {
         return createSendMessage(update, WARNING);
     }
 
+    /**
+     * {@link UserMessageProcessor#deleteChat(Update)}
+     */
     @Override
     public void deleteChat(@NotNull Update update) {
         try {
@@ -74,17 +97,33 @@ public class UserMessageHandler implements UserMessageProcessor {
         }
     }
 
+    /**
+     * Method for sending messages back user based of what user input is
+     * @param update Update received from user to bot
+     * @param message Message to user from bot
+     * @return Entity containing sent message
+     */
     private SendMessage createSendMessage(@NotNull Update update, String message) {
         return new SendMessage(update.message().chat().id(), message);
     }
 
+    /**
+     * Check if bot receives command as a reply to track or untrack
+     * @param update Update sent to bot from user
+     * @return True if update is sent as a reply from user to bot, False otherwise
+     */
     private boolean isReplyTrack(@NotNull Update update) {
         Message reply = update.message().replyToMessage();
         return reply != null && reply.text().equals(REPLY_TRACK);
     }
 
+    /**
+     * Vice versa of {@link UserMessageHandler#isReplyTrack(Update)}
+     */
     private boolean isReplyUntrack(@NotNull Update update) {
         Message reply = update.message().replyToMessage();
         return reply != null && reply.text().equals(REPLY_UNTRACK);
     }
 }
+
+    
