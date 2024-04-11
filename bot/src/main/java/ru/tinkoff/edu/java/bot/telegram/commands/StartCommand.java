@@ -28,7 +28,7 @@ public class StartCommand implements Command {
     private final WebClientScrapper scrapperClient;
 
     /**
-     * {@link Commmand#command()}
+     * {@link Command#command()}
      */
     @Override
     public String command() {
@@ -36,7 +36,7 @@ public class StartCommand implements Command {
     }
 
     /**
-     * {@link Commmand#description()}
+     * {@link Command#description()}
      */
     @Override
     public String description() {

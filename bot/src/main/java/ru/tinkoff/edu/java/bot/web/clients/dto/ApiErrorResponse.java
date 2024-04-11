@@ -23,9 +23,29 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class ApiErrorResponse extends RuntimeException {
+    /** 
+     * Description of what went wrong (Network level)
+    */
     String description;
+
+    /**
+     * Code sent as a response to user
+     */
     String code;
+
+    /**
+     * Name of generated Java's exception
+     */
     String exceptionName;
+
+    /**
+     * Details of what went wrong in Java's exception
+     */
     String exceptionMessage;
+
+    /**
+     * Java's Stack Trace generated when processing bad request
+     */
     String[] stacktrace;
+
 }
