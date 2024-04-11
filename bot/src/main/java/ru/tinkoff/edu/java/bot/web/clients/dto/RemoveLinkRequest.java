@@ -5,7 +5,7 @@ import org.hibernate.validator.constraints.URL;
 
 /**
  * DTO representing a request for request to untrack a repository for concrete user
- * @param link
+ * @param link URL of repository to be removed
  * @author Maxim Berezhnoy
  * @version 1.0
  */

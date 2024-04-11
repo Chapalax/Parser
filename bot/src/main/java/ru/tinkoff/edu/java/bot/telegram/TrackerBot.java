@@ -75,7 +75,7 @@ public class TrackerBot implements Bot {
     }
 
     /**
-     * Method implementing {@link Bot#process(List)()} interface
+     * Method implementing {@link Bot#process(List)} interface
      */
     @Override
     public int process(@NotNull List<Update> list) {
