@@ -16,6 +16,11 @@ import ru.tinkoff.edu.java.bot.configuration.ScrapperClientConfig;
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @EnableConfigurationProperties({ApplicationConfig.class, ScrapperClientConfig.class})
 public class BotApplication {
+
+    /**
+     * Bot can be run with command line arguments
+     * @param args Command line arguments
+     */
     public static void main(String[] args) {
         SpringApplication.run(BotApplication.class, args);
     }
