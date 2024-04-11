@@ -29,7 +29,7 @@ public class UserMessageProcessorConfig {
      * 
      * @return 
      */
-    public UserMessageProcessor userMessageProcessor(WebClientScrapper scrapperClient, StartCommand startCommand,
+    public UserMessageProcessor userMessageProcessor (WebClientScrapper scrapperClient, StartCommand startCommand,
                                                      HelpCommand helpCommand, TrackCommand trackCommand,
                                                      UntrackCommand untrackCommand, ListCommand listCommand) {
         return new UserMessageHandler(
